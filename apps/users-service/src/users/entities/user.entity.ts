@@ -13,7 +13,7 @@ export class User {
     @Column({nullable: true})
     password: string;
 
-    @Column('enum', { enum: Role, default: Role.Regular })
+    @Column('enum', { enum: Role })
     role: Role;
 
     @Column({ default: false })

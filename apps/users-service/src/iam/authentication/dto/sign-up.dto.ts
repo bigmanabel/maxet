@@ -1,5 +1,6 @@
+import { Role } from "@app/users";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEmail, IsStrongPassword, Min, MinLength } from "class-validator";
+import { IsEmail, IsEnum, IsStrongPassword, Min, MinLength } from "class-validator";
 
 export class SignUpDto {
     @ApiProperty()
@@ -10,4 +11,8 @@ export class SignUpDto {
     @IsStrongPassword()
     @MinLength(8)
     password: string;
+
+    @ApiProperty({ enum: Role })
+    @IsEnum(Role)
+    role: Role;
 }
