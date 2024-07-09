@@ -14,6 +14,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=maxet
+      - RABBITMQ_URL=amqp://rabbitmq:5672
     volumes:        
       - ./libs:/usr/src/app/libs
       - ./package.json:/usr/src/app/package.json
@@ -22,6 +23,7 @@ services:
       - ./apps/maxet:/usr/src/app/apps/maxet
     depends_on: 
       - maxet-db
+      - rabbitmq
   maxet-db:
     image: postgres:alpine
     environment:
@@ -43,6 +45,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=deliveries
+      - RABBITMQ_URL=amqp://rabbitmq:5672
     volumes:        
       - ./libs:/usr/src/app/libs
       - ./package.json:/usr/src/app/package.json
@@ -51,6 +54,7 @@ services:
       - ./apps/deliveries-service:/usr/src/app/apps/deliveries-service
     depends_on: 
       - deliveries-db
+      - rabbitmq
   deliveries-db:
     image: postgres:alpine
     environment:
@@ -72,6 +76,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=listings
+      - RABBITMQ_URL=amqp://rabbitmq:5672
     volumes:        
       - ./libs:/usr/src/app/libs
       - ./package.json:/usr/src/app/package.json
@@ -80,6 +85,7 @@ services:
       - ./apps/listings-service:/usr/src/app/apps/listings-service
     depends_on: 
       - listings-db
+      - rabbitmq
   listings-db:
     image: postgres:alpine
     environment:
@@ -101,6 +107,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=orders
+      - RABBITMQ_URL=amqp://rabbitmq:5672
     volumes:        
       - ./libs:/usr/src/app/libs
       - ./package.json:/usr/src/app/package.json
@@ -109,6 +116,7 @@ services:
       - ./apps/orders-service:/usr/src/app/apps/orders-service
     depends_on: 
       - orders-db
+      - rabbitmq
   orders-db:
     image: postgres:alpine
     environment:
@@ -130,6 +138,17 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=users
+      - JWT_TOKEN=XcJwVOuNBIngYy06oNgfjBmtVnD3trLw
+      - JWT_TOKEN_AUDIENCE=user-service:3000
+      - JWT_TOKEN_ISSUER=user-service:3000
+      - JWT_ACCESS_TOKEN_TTL=3600
+      - JWT_REFRESH_TOKEN_TTL=86400
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - TFA_APP_NAME=maxet-authx
+      - GOOGLE_CLIENT_ID=asdfoisdf
+      - GOOGLE_CLIENT_SECRET=asdfkjaosdif
+      - RABBITMQ_URL=amqp://rabbitmq:5672
     volumes:        
       - ./libs:/usr/src/app/libs
       - ./package.json:/usr/src/app/package.json
@@ -138,9 +157,15 @@ services:
       - ./apps/users-service:/usr/src/app/apps/users-service
     depends_on: 
       - users-db
+      - redis
+      - rabbitmq
   users-db:
     image: postgres:alpine
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=users
+  redis:
+    image: redis:alpine
+  rabbitmq:
+    image: rabbitmq:alpine
