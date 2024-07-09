@@ -1,0 +1,14 @@
+{
+  "name": "NestJS Development Container",
+  "dockerComposeFile": "compose.yml",
+  "service": "maxet",
+  "workspaceFolder": "/usr/src/app",
+  "customizations/vscode/extensions": [
+    "ms-azuretools.vscode-docker",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode"
+  ],
+  "customizations/vscode/settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  }
+}

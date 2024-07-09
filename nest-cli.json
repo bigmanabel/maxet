@@ -5,7 +5,8 @@
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/maxet/tsconfig.app.json"
+    "tsConfigPath": "apps/maxet/tsconfig.app.json",
+    "plugins": ["@nestjs/swagger/plugin"]
   },
   "monorepo": true,
   "root": "apps/maxet",
@@ -16,7 +17,10 @@
       "entryFile": "main",
       "sourceRoot": "apps/maxet/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/maxet/tsconfig.app.json"
+        "tsConfigPath": "apps/maxet/tsconfig.app.json",
+        "plugins": [
+          "@nestjs/swagger/plugin"
+        ]
       }
     },
     "users-service": {
@@ -25,7 +29,10 @@
       "entryFile": "main",
       "sourceRoot": "apps/users-service/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/users-service/tsconfig.app.json"
+        "tsConfigPath": "apps/users-service/tsconfig.app.json",
+        "plugins": [
+          "@nestjs/swagger/plugin"
+        ]
       }
     },
     "listings-service": {
@@ -34,7 +41,10 @@
       "entryFile": "main",
       "sourceRoot": "apps/listings-service/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/listings-service/tsconfig.app.json"
+        "tsConfigPath": "apps/listings-service/tsconfig.app.json",
+        "plugins": [
+          "@nestjs/swagger/plugin"
+        ]
       }
     },
     "orders-service": {
@@ -43,7 +53,10 @@
       "entryFile": "main",
       "sourceRoot": "apps/orders-service/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/orders-service/tsconfig.app.json"
+        "tsConfigPath": "apps/orders-service/tsconfig.app.json",
+        "plugins": [
+          "@nestjs/swagger/plugin"
+        ]
       }
     },
     "deliveries-service": {
@@ -52,7 +65,10 @@
       "entryFile": "main",
       "sourceRoot": "apps/deliveries-service/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/deliveries-service/tsconfig.app.json"
+        "tsConfigPath": "apps/deliveries-service/tsconfig.app.json",
+        "plugins": [
+          "@nestjs/swagger/plugin"
+        ]
       }
     },
     "users": {
@@ -61,7 +77,10 @@
       "entryFile": "index",
       "sourceRoot": "libs/users/src",
       "compilerOptions": {
-        "tsConfigPath": "libs/users/tsconfig.lib.json"
+        "tsConfigPath": "libs/users/tsconfig.lib.json",
+        "plugins": [
+          "@nestjs/swagger/plugin"
+        ]
       }
     }
   }
