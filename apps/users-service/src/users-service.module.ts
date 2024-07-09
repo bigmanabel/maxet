@@ -3,6 +3,8 @@ import { UsersServiceController } from './users-service.controller';
 import { UsersServiceService } from './users-service.service';
 import { HealthModule } from './health/health.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { IamModule } from './iam/iam.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    IamModule,
+    UsersModule,
     HealthModule
   ],
   controllers: [UsersServiceController],
