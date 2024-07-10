@@ -14,7 +14,7 @@ export class Customer {
     @Column()
     phoneNumber: string;
 
-    @Column('simple-array')
+    @Column('simple-array', { nullable: true })
     orders: string[];
 
     @CreateDateColumn()
