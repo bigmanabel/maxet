@@ -3,6 +3,7 @@ import { DeliveriesServiceController } from './deliveries-service.controller';
 import { DeliveriesServiceService } from './deliveries-service.service';
 import { HealthModule } from './health/health.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DeliveriesModule } from './deliveries/deliveries.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true,
       synchronize: true,
     }),
-    HealthModule
+    HealthModule,
+    DeliveriesModule
   ],
   controllers: [DeliveriesServiceController],
   providers: [DeliveriesServiceService],
