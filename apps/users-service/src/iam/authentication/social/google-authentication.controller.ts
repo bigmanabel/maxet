@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { GoogleAuthenticationService } from './google-authentication.service';
-import { GoogleTokenDto } from '../dto/google-token.dto';
+import { GoogleTokenDto } from '../../../../../../libs/iam/src/dto/google-token.dto';
 import { Auth } from '../decorators/auth.decorator';
 import { AuthType } from '../enums/auth-type.enum';
 
