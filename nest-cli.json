@@ -6,7 +6,9 @@
     "deleteOutDir": true,
     "webpack": true,
     "tsConfigPath": "apps/maxet/tsconfig.app.json",
-    "plugins": ["@nestjs/swagger/plugin"]
+    "plugins": [
+      "@nestjs/swagger/plugin"
+    ]
   },
   "monorepo": true,
   "root": "apps/maxet",
@@ -81,6 +83,42 @@
         "plugins": [
           "@nestjs/swagger/plugin"
         ]
+      }
+    },
+    "listings": {
+      "type": "library",
+      "root": "libs/listings",
+      "entryFile": "index",
+      "sourceRoot": "libs/listings/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/listings/tsconfig.lib.json"
+      }
+    },
+    "orders": {
+      "type": "library",
+      "root": "libs/orders",
+      "entryFile": "index",
+      "sourceRoot": "libs/orders/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/orders/tsconfig.lib.json"
+      }
+    },
+    "deliveries": {
+      "type": "library",
+      "root": "libs/deliveries",
+      "entryFile": "index",
+      "sourceRoot": "libs/deliveries/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/deliveries/tsconfig.lib.json"
+      }
+    },
+    "shared": {
+      "type": "library",
+      "root": "libs/shared",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
       }
     }
   }

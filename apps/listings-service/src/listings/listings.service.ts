@@ -1,6 +1,6 @@
 import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateListingDto } from './dto/create-listing.dto';
-import { UpdateListingDto } from './dto/update-listing.dto';
+import { CreateListingDto } from '../../../../libs/listings/src/dto/create-listing.dto';
+import { UpdateListingDto } from '../../../../libs/listings/src/dto/update-listing.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Listing } from './entities/listing.entity';
 import { Repository } from 'typeorm';
@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 export class ListingsService {
   constructor(
     @InjectRepository(Listing) private readonly listingRepository: Repository<Listing>,
-  ) {}
+  ) { }
 
   async create(createListingDto: CreateListingDto) {
     try {

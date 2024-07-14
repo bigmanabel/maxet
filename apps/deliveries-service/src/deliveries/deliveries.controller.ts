@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { DeliveriesService } from './deliveries.service';
-import { CreateDeliveryDto } from './dto/create-delivery.dto';
-import { UpdateDeliveryDto } from './dto/update-delivery.dto';
+import { CreateDeliveryDto } from '../../../../libs/deliveries/src/dto/create-delivery.dto';
+import { UpdateDeliveryDto } from '../../../../libs/deliveries/src/dto/update-delivery.dto';
 
 @Controller('deliveries')
 export class DeliveriesController {
-  constructor(private readonly deliveriesService: DeliveriesService) {}
+  constructor(private readonly deliveriesService: DeliveriesService) { }
 
   @Post()
   create(@Body() createDeliveryDto: CreateDeliveryDto) {

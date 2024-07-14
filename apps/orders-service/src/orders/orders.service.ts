@@ -1,6 +1,6 @@
 import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
+import { CreateOrderDto } from '../../../../libs/orders/src/dto/create-order.dto';
+import { UpdateOrderDto } from '../../../../libs/orders/src/dto/update-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
@@ -9,7 +9,7 @@ import { Repository } from 'typeorm';
 export class OrdersService {
   constructor(
     @InjectRepository(Order) private readonly orderRepository: Repository<Order>,
-  ) {}
+  ) { }
 
   async create(createOrderDto: CreateOrderDto) {
     try {

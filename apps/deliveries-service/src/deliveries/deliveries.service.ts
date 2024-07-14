@@ -1,6 +1,6 @@
 import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateDeliveryDto } from './dto/create-delivery.dto';
-import { UpdateDeliveryDto } from './dto/update-delivery.dto';
+import { CreateDeliveryDto } from '../../../../libs/deliveries/src/dto/create-delivery.dto';
+import { UpdateDeliveryDto } from '../../../../libs/deliveries/src/dto/update-delivery.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Delivery } from './entities/delivery.entity';
 import { Repository } from 'typeorm';

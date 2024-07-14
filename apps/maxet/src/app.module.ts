@@ -4,7 +4,11 @@ import { AppService } from './app.service';
 import { HealthModule } from './health/health.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { DELIVERIES_SERVICE, LISTINGS_SERVICE, ORDERS_SERVICE, USERS_SERVICE } from '../contants';
+import { DELIVERIES_SERVICE, LISTINGS_SERVICE, ORDERS_SERVICE, USERS_SERVICE } from '../../../libs/shared/src/constants';
+import { UsersModule } from './users/users.module';
+import { ListingsModule } from './listings/listings.module';
+import { OrdersModule } from './orders/orders.module';
+import { DeliveriesModule } from './deliveries/deliveries.module';
 
 @Module({
   imports: [
@@ -43,16 +47,12 @@ import { DELIVERIES_SERVICE, LISTINGS_SERVICE, ORDERS_SERVICE, USERS_SERVICE } f
           queue: 'orders-service'
         }
       },
-      {
-        name: LISTINGS_SERVICE,
-        transport: Transport.RMQ,
-        options: {
-          urls: [process.env.RABBITMQ_URL],
-          queue: 'listings-service'
-        }
-      },
     ]),
-    HealthModule
+    HealthModule,
+    UsersModule,
+    ListingsModule,
+    OrdersModule,
+    DeliveriesModule
   ],
   controllers: [AppController],
   providers: [AppService],

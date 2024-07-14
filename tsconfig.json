@@ -23,6 +23,30 @@
       ],
       "@app/users/*": [
         "libs/users/src/*"
+      ],
+      "@app/listings": [
+        "libs/listings/src"
+      ],
+      "@app/listings/*": [
+        "libs/listings/src/*"
+      ],
+      "@app/orders": [
+        "libs/orders/src"
+      ],
+      "@app/orders/*": [
+        "libs/orders/src/*"
+      ],
+      "@app/deliveries": [
+        "libs/deliveries/src"
+      ],
+      "@app/deliveries/*": [
+        "libs/deliveries/src/*"
+      ],
+      "@app/shared": [
+        "libs/shared/src"
+      ],
+      "@app/shared/*": [
+        "libs/shared/src/*"
       ]
     }
   }
