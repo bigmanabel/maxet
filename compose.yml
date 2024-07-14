@@ -7,7 +7,7 @@ services:
         - APP_NAME=maxet
     command: yarn start:dev maxet
     ports:
-      - 8000:8000
+      - 3000:3000
     environment:
       - POSTGRES_HOST=maxet-db
       - POSTGRES_PORT=5432
@@ -43,7 +43,7 @@ services:
         - APP_NAME=deliveries-service
     command: yarn start:dev deliveries-service
     ports:
-      - 4000:4000
+      - 3001:3001
     environment:
       - POSTGRES_HOST=deliveries-db
       - POSTGRES_PORT=5432
@@ -74,7 +74,7 @@ services:
         - APP_NAME=listings-service
     command: yarn start:dev listings-service
     ports:
-      - 5000:5000
+      - 3002:3002
     environment:
       - POSTGRES_HOST=listings-db
       - POSTGRES_PORT=5432
@@ -105,7 +105,7 @@ services:
         - APP_NAME=orders-service
     command: yarn start:dev orders-service
     ports:
-      - 6000:6000
+      - 3003:3003
     environment:
       - POSTGRES_HOST=orders-db
       - POSTGRES_PORT=5432
@@ -136,7 +136,7 @@ services:
         - APP_NAME=users-service
     command: yarn start:dev users-service
     ports:
-      - 7000:7000
+      - 3004:3004
     environment:
       - POSTGRES_HOST=users-db
       - POSTGRES_PORT=5432
