@@ -29,7 +29,7 @@ export class AuthController {
     @MessagePattern('auth.refreshTokens')
     async refreshTokens(@Payload() refreshTokenDto: RefreshTokenDto) {
         const user = await lastValueFrom(
-            this.client.send('auth.refreshTokens', refreshToken)
+            this.client.send('auth.refreshTokens', refreshTokenDto)
         );
         return user;
     }
