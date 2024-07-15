@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
 import { ListingsService } from './listings.service';
 import { CreateListingDto } from '@app/listings';
 import { UpdateListingDto } from '@app/listings';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('listings')
 @Controller('listings')
 export class ListingsController {
   constructor(private readonly listingsService: ListingsService) { }
@@ -22,7 +24,7 @@ export class ListingsController {
     return this.listingsService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateListingDto: UpdateListingDto) {
     return this.listingsService.update(id, updateListingDto);
   }

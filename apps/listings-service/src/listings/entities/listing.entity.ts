@@ -1,7 +1,7 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Shop } from "../../shops/entities/shop.entity";
 
-Entity('listings')
+@Entity('listings')
 export class Listing { 
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -12,7 +12,7 @@ export class Listing {
     @Column()
     description: string;
 
-    @Column('decimal', { scale: 9, precision: 2, default: 0.00 })
+    @Column('decimal', { precision: 9, scale: 2, default: 0.00 })
     price: number;
 
     @Column()

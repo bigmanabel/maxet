@@ -3,6 +3,7 @@ import { CreateShopDto, UpdateShopDto } from '@app/listings';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Shop } from './entities/shop.entity';
 import { Repository } from 'typeorm';
+import { Status } from '@app/shared';
 
 @Injectable()
 export class ShopsService {
@@ -102,7 +103,7 @@ export class ShopsService {
         throw new NotFoundException('Shop not found');
       }
 
-      await this.shopRepository.remove(shop);
+      await this.shopRepository.update(id, { status: Status.Inactive});
 
       return {
         statusCode: HttpStatus.OK,

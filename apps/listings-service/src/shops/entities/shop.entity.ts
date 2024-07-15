@@ -1,7 +1,8 @@
 import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Listing } from "../../listings/entities/listing.entity";
+import { Status } from "@app/shared";
 
-Entity('shops')
+@Entity('shops')
 export class Shop {
     @PrimaryGeneratedColumn('uuid')
     id: string;
@@ -17,6 +18,9 @@ export class Shop {
 
     @Column()
     owner: string;
+
+    @Column('enum', { enum: Status, default: Status.Active })
+    status: Status;
 
     @CreateDateColumn()
     createdAt: Date;
