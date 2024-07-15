@@ -32,9 +32,7 @@ export class AuthenticationService {
             });
 
             await this.userRepository.save(user);
-
-            console.log(this.jwtConfiguration.secret)
-
+            
             return await this.generateTokens(user);
         } catch (error) {
             const pgUniqueViolationErrorCode = '23505';
@@ -142,7 +140,7 @@ export class AuthenticationService {
                 audience: this.jwtConfiguration.audience,
                 issuer: this.jwtConfiguration.issuer,
                 secret: this.jwtConfiguration.secret,
-                expiresIn: this.jwtConfiguration.accessTokenTtl,
+                expiresIn,
             }
         );
     }

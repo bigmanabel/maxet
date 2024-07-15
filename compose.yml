@@ -144,8 +144,8 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=users
       - JWT_TOKEN=XcJwVOuNBIngYy06oNgfjBmtVnD3trLw
-      - JWT_TOKEN_AUDIENCE=user-service:3000
-      - JWT_TOKEN_ISSUER=user-service:3000
+      - JWT_TOKEN_AUDIENCE=user-service:3004
+      - JWT_TOKEN_ISSUER=user-service:3004
       - JWT_ACCESS_TOKEN_TTL=3600
       - JWT_REFRESH_TOKEN_TTL=86400
       - REDIS_HOST=redis
