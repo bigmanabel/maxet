@@ -1,26 +1,126 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { Repository } from 'typeorm';
+import { Status } from '@app/shared';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>,) { }
+
+  async findAll() {
+    try {
+      const users = await this.userRepository.find({
+        relations: ['shopOwner', 'customer'],
+      });
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Users retrieved successfully',
+        data: users,
+      }
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findOne(id: string) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: {
+          id,
+        },
+        relations: ['shopOwner', 'customer'],
+      })
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'User retrieved successfully',
+        data: user,
+      }
+
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw new BadRequestException(error.message);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async update(id: string, updateUserDto: UpdateUserDto) {
+   try {
+    const user = await this.userRepository.findOneBy({ id });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    await this.userRepository.update(id, updateUserDto);
+
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'User updated successfully',
+    }
+   } catch (error) {
+    if (error instanceof NotFoundException) {
+      throw new NotFoundException(error.message);
+    }
+     throw new BadRequestException(error.message);
+   }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async remove(id: string) {
+    try {
+      const user = await this.userRepository.findOneBy({ id });
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      await this.userRepository.update(id, { status: Status.Inactive });
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'User deleted successfully',
+      }
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw new BadRequestException(error.message);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async orders(id: string) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: {
+          id,
+        },
+        relations: ['customer'],
+      });
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Orders retrieved successfully',
+        data: user.customer.orders,
+      }
+    } catch (error) {
+      console.log(error);
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw new BadRequestException(error.message);
+    }
   }
 }

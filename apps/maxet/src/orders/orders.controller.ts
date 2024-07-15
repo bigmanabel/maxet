@@ -1,7 +1,7 @@
 import { CreateOrderDto } from '@app/orders';
 import { Controller, Inject } from '@nestjs/common';
 import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
-import { ORDERS_SERVICE } from '@app/shared/constants';
+import { ORDERS_SERVICE } from '@app/shared/constants/constants';
 import { lastValueFrom } from 'rxjs';
 
 @Controller('orders')

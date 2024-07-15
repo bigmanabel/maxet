@@ -11,12 +11,38 @@ import { OtpAuthenticationService } from './otp-authentication.service';
 import { Response } from 'express';
 import { toFileStream } from 'qrcode';
 import { CreateCustomerDto, CreateShopOwnerDto } from '@app/users';
+import { ApiBody, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
 
 @Auth(AuthType.None)
 @Controller('auth')
 export class AuthenticationController {
     constructor(private readonly authenticationService: AuthenticationService, private readonly otpAuthenticationService: OtpAuthenticationService) { }
 
+    @ApiExtraModels(SignUpDto, CreateCustomerDto, CreateShopOwnerDto)
+    // @ApiBody({
+    //     schema: {
+    //         allOf: [
+    //             { $ref: getSchemaPath(SignUpDto) },
+    //             { $ref: getSchemaPath(CreateShopOwnerDto)},
+    //             { $ref: getSchemaPath(CreateCustomerDto) }
+    //         ]
+    //     }
+    // })
+    @ApiBody({
+        schema: {
+            type: 'object',
+            properties: {
+                signUpDto: { $ref: getSchemaPath(SignUpDto) },
+                userTypeDto: {
+                    oneOf: [
+                        { $ref: getSchemaPath(CreateShopOwnerDto) },
+                        { $ref: getSchemaPath(CreateCustomerDto) }
+                    ]
+                }
+            },
+            required: ['signUpDto', 'userTypeDto']
+        }
+    })
     @Post('sign-up')
     signUp(@Body() signUpDto: SignUpDto, @Body() userTypeDto: CreateCustomerDto | CreateShopOwnerDto) {
         return this.authenticationService.signUp(signUpDto, userTypeDto);

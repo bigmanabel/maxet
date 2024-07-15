@@ -1,5 +1,8 @@
 import { Role } from "@app/users";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Customer } from "../customers/entities/customer.entity";
+import { ShopOwner } from "../shop-owners/entities/shop-owner.entity";
+import { Status } from "@app/shared";
 
 
 @Entity('users')
@@ -24,4 +27,15 @@ export class User {
 
     @Column({ nullable: true })
     googleId: string;
+
+    @Column('enum', { enum: Status, default: Status.Active })
+    status: Status;
+
+    @OneToOne(() => Customer, customer => customer.user)
+    @JoinColumn()
+    customer?: Customer;
+
+    @OneToOne(() => ShopOwner, shopOwner => shopOwner.user)
+    @JoinColumn()
+    shopOwner?: ShopOwner;
 }

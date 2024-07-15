@@ -14,6 +14,7 @@ import { OtpAuthenticationService } from './otp-authentication.service';
 import { CreateCustomerDto, CreateShopOwnerDto, Role } from '@app/users';
 import { Customer } from '../../users/customers/entities/customer.entity';
 import { ShopOwner } from '../../users/shop-owners/entities/shop-owner.entity';
+import { Status } from '@app/shared';
 
 @Injectable()
 export class AuthenticationService {
@@ -64,7 +65,7 @@ export class AuthenticationService {
             email: signInDto.email,
         });
 
-        if (!user) {
+        if (!user || user.status === Status.Inactive) {
             throw new UnauthorizedException('User does not exist');
         }
 

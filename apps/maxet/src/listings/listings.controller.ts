@@ -1,7 +1,7 @@
 import { CreateListingDto } from '@app/listings';
 import { Controller, Inject } from '@nestjs/common';
 import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
-import { LISTINGS_SERVICE } from '@app/shared/constants';
+import { LISTINGS_SERVICE } from '@app/shared/constants/constants';
 import { lastValueFrom } from 'rxjs';
 
 @Controller('listings')

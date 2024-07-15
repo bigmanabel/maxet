@@ -1,7 +1,7 @@
 import { CreateDeliveryDto } from '@app/deliveries';
 import { Controller, Inject } from '@nestjs/common';
 import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
-import { DELIVERIES_SERVICE } from '@app/shared/constants';
+import { DELIVERIES_SERVICE } from '@app/shared/constants/constants';
 import { lastValueFrom } from 'rxjs';
 
 @Controller('deliveries')
