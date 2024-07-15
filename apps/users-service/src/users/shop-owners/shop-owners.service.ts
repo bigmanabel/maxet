@@ -1,5 +1,5 @@
 import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { UpdateShopOwnerDto } from './dto/update-shop-owner.dto';
+import { UpdateShopOwnerDto } from '../../../../../libs/users/src/dto/update-shop-owner.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ShopOwner } from './entities/shop-owner.entity';
 import { Repository } from 'typeorm';

@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ShopOwnersService } from './shop-owners.service';
-import { CreateShopOwnerDto } from './dto/create-shop-owner.dto';
-import { UpdateShopOwnerDto } from './dto/update-shop-owner.dto';
+import { CreateShopOwnerDto } from '../../../../../libs/users/src/dto/create-shop-owner.dto';
+import { UpdateShopOwnerDto } from '../../../../../libs/users/src/dto/update-shop-owner.dto';
 
 @Controller('shop-owners')
 export class ShopOwnersController {
-  constructor(private readonly shopOwnersService: ShopOwnersService) {}
+  constructor(private readonly shopOwnersService: ShopOwnersService) { }
 
   @Get()
   findAll() {

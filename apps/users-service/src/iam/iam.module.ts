@@ -16,10 +16,12 @@ import { RolesGuard } from './authorization/guards/roles.guard';
 import { OtpAuthenticationService } from './authentication/otp-authentication.service';
 import { GoogleAuthenticationService } from './authentication/social/google-authentication.service';
 import { GoogleAuthenticationController } from './authentication/social/google-authentication.controller';
+import { ShopOwner } from '../users/shop-owners/entities/shop-owner.entity';
+import { Customer } from '../users/customers/entities/customer.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Customer, ShopOwner]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
   ],

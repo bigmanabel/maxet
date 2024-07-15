@@ -1,6 +1,5 @@
 import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateShopDto } from './dto/create-shop.dto';
-import { UpdateShopDto } from './dto/update-shop.dto';
+import { CreateShopDto, UpdateShopDto } from '@app/listings';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Shop } from './entities/shop.entity';
 import { Repository } from 'typeorm';
@@ -9,7 +8,7 @@ import { Repository } from 'typeorm';
 export class ShopsService {
   constructor(
     @InjectRepository(Shop) private readonly shopRepository: Repository<Shop>,
-  ) {}
+  ) { }
 
   async create(createShopDto: CreateShopDto) {
     try {
@@ -98,7 +97,7 @@ export class ShopsService {
   async remove(id: string) {
     try {
       const shop = await this.shopRepository.findOneBy({ id });
-      
+
       if (!shop) {
         throw new NotFoundException('Shop not found');
       }

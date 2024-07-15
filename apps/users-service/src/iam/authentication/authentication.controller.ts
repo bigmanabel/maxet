@@ -10,6 +10,7 @@ import { ActiveUserData } from '../interfaces/active-user-data.interface';
 import { OtpAuthenticationService } from './otp-authentication.service';
 import { Response } from 'express';
 import { toFileStream } from 'qrcode';
+import { CreateCustomerDto, CreateShopOwnerDto } from '@app/users';
 
 @Auth(AuthType.None)
 @Controller('auth')
@@ -17,8 +18,8 @@ export class AuthenticationController {
     constructor(private readonly authenticationService: AuthenticationService, private readonly otpAuthenticationService: OtpAuthenticationService) { }
 
     @Post('sign-up')
-    signUp(@Body() signUpDto: SignUpDto) {
-        return this.authenticationService.signUp(signUpDto);
+    signUp(@Body() signUpDto: SignUpDto, @Body() userTypeDto: CreateCustomerDto | CreateShopOwnerDto) {
+        return this.authenticationService.signUp(signUpDto, userTypeDto);
     }
 
     @HttpCode(HttpStatus.OK)

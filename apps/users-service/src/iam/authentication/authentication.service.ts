@@ -3,20 +3,24 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { HashingService } from '../hashing/hashing.service';
-import { SignUpDto } from '../../../../../libs/iam/src/dto/sign-up.dto';
-import { SignInDto } from '../../../../../libs/iam/src/dto/sign-in.dto';
+import { SignUpDto, SignInDto, RefreshTokenDto } from '@app/iam';
 import { JwtService } from '@nestjs/jwt';
 import jwtConfig from '../config/jwt.config';
 import { ConfigType } from '@nestjs/config';
 import { ActiveUserData } from '../interfaces/active-user-data.interface';
-import { RefreshTokenDto } from '../../../../../libs/iam/src/dto/refresh-token.dto';
 import { InvalidatedRefreshTokenError, RefreshTokenIdsStorage } from './refresh-token-ids.storage';
 import { randomUUID } from 'crypto';
 import { OtpAuthenticationService } from './otp-authentication.service';
+import { CreateCustomerDto, CreateShopOwnerDto, Role } from '@app/users';
+import { Customer } from '../../users/customers/entities/customer.entity';
+import { ShopOwner } from '../../users/shop-owners/entities/shop-owner.entity';
+
 @Injectable()
 export class AuthenticationService {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
+        @InjectRepository(Customer) private readonly customerRepository: Repository<Customer>,
+        @InjectRepository(ShopOwner) private readonly shopOwnerRepository: Repository<ShopOwner>,
         private readonly hashingService: HashingService,
         private readonly jwtService: JwtService,
         @Inject(jwtConfig.KEY) private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
@@ -24,7 +28,7 @@ export class AuthenticationService {
         private readonly otpAuthenticationService: OtpAuthenticationService,
     ) { }
 
-    async signUp(signUpDto: SignUpDto) {
+    async signUp(signUpDto: SignUpDto, userTypeDto: CreateCustomerDto | CreateShopOwnerDto) {
         try {
             const user = this.userRepository.create({
                 ...signUpDto,
@@ -32,7 +36,19 @@ export class AuthenticationService {
             });
 
             await this.userRepository.save(user);
-            
+
+            if (signUpDto.role === Role.Customer) {
+                await this.customerRepository.save({
+                    ...userTypeDto as CreateCustomerDto,
+                    user,
+                });
+            } else if (signUpDto.role === Role.ShopOwner) {
+                await this.shopOwnerRepository.save({
+                    ...userTypeDto as CreateShopOwnerDto,
+                    user,
+                });
+            }
+
             return await this.generateTokens(user);
         } catch (error) {
             const pgUniqueViolationErrorCode = '23505';
