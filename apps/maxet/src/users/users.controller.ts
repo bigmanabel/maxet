@@ -10,7 +10,7 @@ export class UsersController {
         private readonly usersService: UsersService,
     ) {} 
 
-    @Post()
+    @Get()
     findAll() {
         return this.usersService.findAll();
     }

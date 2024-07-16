@@ -3,38 +3,33 @@ import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Roles } from '../iam/authorization/decorators/roles.decorator';
 import { Role } from '@app/users';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @HttpCode(HttpStatus.OK)
-  @Get()
+  @MessagePattern('users.findAll')
   findAll() {
     return this.usersService.findAll();
   }
 
-  @HttpCode(HttpStatus.OK)
-  @Get(':id')
+  @MessagePattern('users.findOne')
   findOne(@Param('id') id: string) {
     return this.usersService.findOne(id);
   }
 
-  @Roles(Role.Customer)
-  @HttpCode(HttpStatus.OK)
-  @Get(':id/orders')
+  @MessagePattern('users.orders')
   orders(@Param('id') id: string) { 
     return this.usersService.orders(id);
   }
 
-  @HttpCode(HttpStatus.OK)
-  @Put(':id')
+  @MessagePattern('users.update')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
-  @HttpCode(HttpStatus.OK)
-  @Delete(':id')
+  @MessagePattern('users.delete')
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
   }

@@ -1,4 +1,4 @@
-import { CreateListingDto } from '@app/listings';
+import { CreateListingDto, UpdateListingDto } from '@app/listings';
 import { LISTINGS_SERVICE } from '@app/shared';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
@@ -31,7 +31,7 @@ export class ListingsService {
         return listing;
     }
 
-    async update(id: string, updateListingDto: CreateListingDto) {
+    async update(id: string, updateListingDto: UpdateListingDto) {
         const listing = await lastValueFrom(
             this.client.send('listings.update', { id, ...updateListingDto })
         );

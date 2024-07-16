@@ -1,4 +1,4 @@
-import { CreateDeliveryDto } from '@app/deliveries';
+import { CreateDeliveryDto, UpdateDeliveryDto } from '@app/deliveries';
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { DeliveriesService } from './deliveries.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -26,7 +26,7 @@ export class DeliveriesController {
     }
 
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateDeliveryDto: CreateDeliveryDto) {
+    update(@Param('id') id: string, @Body() updateDeliveryDto: UpdateDeliveryDto) {
         return this.deliveriesService.update(id, updateDeliveryDto);
     }
 

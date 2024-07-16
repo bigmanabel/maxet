@@ -12,16 +12,12 @@ import { InvalidatedRefreshTokenError, RefreshTokenIdsStorage } from './refresh-
 import { randomUUID } from 'crypto';
 import { OtpAuthenticationService } from './otp-authentication.service';
 import { CreateCustomerDto, CreateShopOwnerDto, Role } from '@app/users';
-import { Customer } from '../../users/customers/entities/customer.entity';
-import { ShopOwner } from '../../users/shop-owners/entities/shop-owner.entity';
 import { Status } from '@app/shared';
 
 @Injectable()
 export class AuthenticationService {
     constructor(
         @InjectRepository(User) private readonly userRepository: Repository<User>,
-        @InjectRepository(Customer) private readonly customerRepository: Repository<Customer>,
-        @InjectRepository(ShopOwner) private readonly shopOwnerRepository: Repository<ShopOwner>,
         private readonly hashingService: HashingService,
         private readonly jwtService: JwtService,
         @Inject(jwtConfig.KEY) private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
@@ -29,7 +25,7 @@ export class AuthenticationService {
         private readonly otpAuthenticationService: OtpAuthenticationService,
     ) { }
 
-    async signUp(signUpDto: SignUpDto, userTypeDto: CreateCustomerDto | CreateShopOwnerDto) {
+    async signUp(signUpDto: SignUpDto) {
         try {
             const user = this.userRepository.create({
                 ...signUpDto,
@@ -37,18 +33,6 @@ export class AuthenticationService {
             });
 
             await this.userRepository.save(user);
-
-            if (signUpDto.role === Role.Customer) {
-                await this.customerRepository.save({
-                    ...userTypeDto as CreateCustomerDto,
-                    user,
-                });
-            } else if (signUpDto.role === Role.ShopOwner) {
-                await this.shopOwnerRepository.save({
-                    ...userTypeDto as CreateShopOwnerDto,
-                    user,
-                });
-            }
 
             return await this.generateTokens(user);
         } catch (error) {

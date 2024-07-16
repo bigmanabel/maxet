@@ -12,13 +12,11 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @Inject(ORDERS_SERVICE) private readonly client: ClientProxy,
-) { }
+  ) { }
 
   async findAll() {
     try {
-      const users = await this.userRepository.find({
-        relations: ['shopOwner', 'customer'],
-      });
+      const users = await this.userRepository.find();
 
       return {
         statusCode: HttpStatus.OK,
@@ -32,12 +30,7 @@ export class UsersService {
 
   async findOne(id: string) {
     try {
-      const user = await this.userRepository.findOne({
-        where: {
-          id,
-        },
-        relations: ['shopOwner', 'customer'],
-      })
+      const user = await this.userRepository.findOneBy({ id });
 
       if (!user) {
         throw new NotFoundException('User not found');
@@ -58,25 +51,25 @@ export class UsersService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-   try {
-    const user = await this.userRepository.findOneBy({ id });
+    try {
+      const user = await this.userRepository.findOneBy({ id });
 
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
 
-    await this.userRepository.update(id, updateUserDto);
+      await this.userRepository.update(id, updateUserDto);
 
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'User updated successfully',
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'User updated successfully',
+      }
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw new BadRequestException(error.message);
     }
-   } catch (error) {
-    if (error instanceof NotFoundException) {
-      throw new NotFoundException(error.message);
-    }
-     throw new BadRequestException(error.message);
-   }
   }
 
   async remove(id: string) {
@@ -103,12 +96,7 @@ export class UsersService {
 
   async orders(id: string) {
     try {
-      const user = await this.userRepository.findOne({
-        where: {
-          id,
-        },
-        relations: ['customer'],
-      });
+      const user = await this.userRepository.findOneBy({ id });
 
       if (!user) {
         throw new NotFoundException('User not found');

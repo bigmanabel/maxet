@@ -16,12 +16,10 @@ import { RolesGuard } from './authorization/guards/roles.guard';
 import { OtpAuthenticationService } from './authentication/otp-authentication.service';
 import { GoogleAuthenticationService } from './authentication/social/google-authentication.service';
 import { GoogleAuthenticationController } from './authentication/social/google-authentication.controller';
-import { ShopOwner } from '../users/shop-owners/entities/shop-owner.entity';
-import { Customer } from '../users/customers/entities/customer.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Customer, ShopOwner]),
+    TypeOrmModule.forFeature([User]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
   ],
@@ -30,14 +28,14 @@ import { Customer } from '../users/customers/entities/customer.entity';
       provide: HashingService,
       useClass: BcryptService,
     },
-    {
-      provide: APP_GUARD,
-      useClass: AuthenticationGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: RolesGuard,
-    },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthenticationGuard,
+    // },
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: RolesGuard,
+    // },
     AccessTokenGuard,
     RefreshTokenIdsStorage,
     AuthenticationService,
@@ -46,4 +44,4 @@ import { Customer } from '../users/customers/entities/customer.entity';
   ],
   controllers: [AuthenticationController, GoogleAuthenticationController]
 })
-export class IamModule {}
+export class IamModule { }

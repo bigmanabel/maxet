@@ -17,34 +17,9 @@ import { RefreshTokenDto, SignInDto, SignUpDto } from '@app/iam';
 export class AuthenticationController {
     constructor(private readonly authenticationService: AuthenticationService, private readonly otpAuthenticationService: OtpAuthenticationService) { }
 
-    @ApiExtraModels(SignUpDto, CreateCustomerDto, CreateShopOwnerDto)
-    // @ApiBody({
-    //     schema: {
-    //         allOf: [
-    //             { $ref: getSchemaPath(SignUpDto) },
-    //             { $ref: getSchemaPath(CreateShopOwnerDto)},
-    //             { $ref: getSchemaPath(CreateCustomerDto) }
-    //         ]
-    //     }
-    // })
-    @ApiBody({
-        schema: {
-            type: 'object',
-            properties: {
-                signUpDto: { $ref: getSchemaPath(SignUpDto) },
-                userTypeDto: {
-                    oneOf: [
-                        { $ref: getSchemaPath(CreateShopOwnerDto) },
-                        { $ref: getSchemaPath(CreateCustomerDto) }
-                    ]
-                }
-            },
-            required: ['signUpDto', 'userTypeDto']
-        }
-    })
     @MessagePattern('auth.signUp')
-    signUp(@Body() signUpDto: SignUpDto, @Body() userTypeDto: CreateCustomerDto | CreateShopOwnerDto) {
-        return this.authenticationService.signUp(signUpDto, userTypeDto);
+    signUp(@Body() signUpDto: SignUpDto) {
+        return this.authenticationService.signUp(signUpDto);
     }
 
     @HttpCode(HttpStatus.OK)
