@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { DeliveriesController } from './deliveries.controller';
 import { Client, ClientsModule, Transport } from '@nestjs/microservices';
 import { DELIVERIES_SERVICE } from '@app/shared';
+import { DeliveriesService } from './deliveries.service';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { DELIVERIES_SERVICE } from '@app/shared';
       },
     ])
   ],
-  controllers: [DeliveriesController]
+  controllers: [DeliveriesController],
+  providers: [DeliveriesService]
 })
 export class DeliveriesModule { }

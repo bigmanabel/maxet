@@ -1,52 +1,37 @@
 import { CreateListingDto } from '@app/listings';
-import { Controller, Inject } from '@nestjs/common';
-import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
-import { LISTINGS_SERVICE } from '@app/shared/constants/constants';
-import { lastValueFrom } from 'rxjs';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ListingsService } from './listings.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('listings')
 @Controller('listings')
 export class ListingsController {
     constructor(
-        @Inject(LISTINGS_SERVICE) private readonly client: ClientProxy,
+        private readonly listingsService: ListingsService
     ) { }
 
-    @MessagePattern('listings.create')
-    async create(@Payload() createListingDto: CreateListingDto) {
-        const listing = await lastValueFrom(
-            this.client.send('listings.create', createListingDto)
-        );
-        return listing;
+    @Post()
+    create(@Body() createListingDto: CreateListingDto) {
+        return this.listingsService.create(createListingDto);
     }
 
-    @MessagePattern('listings.findAll')
-    async findAll() {
-        const listings = await lastValueFrom(
-            this.client.send('listings.findAll', {})
-        );
-        return listings;
+    @Get()
+    findAll() {
+        return this.listingsService.findAll();
     }
 
-    @MessagePattern('listings.findOne')
-    async findOne(@Payload() id: number) {
-        const listing = await lastValueFrom(
-            this.client.send('listings.findOne', id)
-        );
-        return listing;
+    @Get(':id')
+    findOne(@Param('id') id: string) {
+        return this.listingsService.findOne(id);
     }
 
-    @MessagePattern('listings.update')
-    async update(@Payload() updateListingDto: CreateListingDto) {
-        const listing = await lastValueFrom(
-            this.client.send('listings.update', updateListingDto)
-        );
-        return listing;
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() updateListingDto: CreateListingDto) {
+        return this.listingsService.update(id, updateListingDto);
     }
 
-    @MessagePattern('listings.delete')
-    async remove(@Payload() id: number) {
-        const listing = await lastValueFrom(
-            this.client.send('listings.delete', id)
-        );
-        return listing;
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.listingsService.remove(id);
     }
 }

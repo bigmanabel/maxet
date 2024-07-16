@@ -1,44 +1,30 @@
-import { SignInDto, SignUpDto } from '@app/iam';
-import { USERS_SERVICE } from '@app/shared';
-import { Controller, Inject } from '@nestjs/common';
-import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
-import { lastValueFrom } from 'rxjs';
+import { SignUpDto } from '@app/iam';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
     constructor(
-        @Inject(USERS_SERVICE) private readonly client: ClientProxy,
+        private readonly usersService: UsersService,
     ) {} 
 
-    @MessagePattern('user.findAll')
-    async findAll() {
-        const users = await lastValueFrom(
-            this.client.send('user.findAll', {})
-        );
-        return users;
+    @Post()
+    findAll() {
+        return this.usersService.findAll();
     }
 
-    @MessagePattern('user.findOne')
-    async findOne(@Payload() id: number) {
-        const user = await lastValueFrom(
-            this.client.send('user.findOne', id)
-        );
-        return user;
+    @Get(':id')
+    findOne(@Param('id') id: string) {
+        return this.usersService.findOne(id);
     }
 
-    @MessagePattern('user.update')
-    async update(@Payload() updateUserDto: SignUpDto) {
-        const user = await lastValueFrom(
-            this.client.send('user.update', updateUserDto)
-        );
-        return user;
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() updateUserDto: SignUpDto) {
+        return this.usersService.update(id, updateUserDto)
     }
 
-    @MessagePattern('user.delete')
-    async remove(@Payload() id: number) {
-        const user = await lastValueFrom(
-            this.client.send('user.delete', id)
-        );
-        return user;
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.usersService.remove(id);
     }
 }

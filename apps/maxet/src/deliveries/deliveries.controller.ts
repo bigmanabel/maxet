@@ -1,52 +1,37 @@
 import { CreateDeliveryDto } from '@app/deliveries';
-import { Controller, Inject } from '@nestjs/common';
-import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
-import { DELIVERIES_SERVICE } from '@app/shared/constants/constants';
-import { lastValueFrom } from 'rxjs';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { DeliveriesService } from './deliveries.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('deliveries')
 @Controller('deliveries')
 export class DeliveriesController {
     constructor(
-        @Inject(DELIVERIES_SERVICE) private readonly client: ClientProxy,
+        private readonly deliveriesService: DeliveriesService
     ) { }
 
-    @MessagePattern('deliveries.create')
-    async create(@Payload() createDeliveryDto: CreateDeliveryDto) {
-        const delivery = await lastValueFrom(
-            this.client.send('deliveries.create', createDeliveryDto)
-        );
-        return delivery;
+    @Post()
+    create(@Body() createDeliveryDto: CreateDeliveryDto) {
+        return this.deliveriesService.create(createDeliveryDto);
     }
 
-    @MessagePattern('deliveries.findAll')
-    async findAll() {
-        const deliveries = await lastValueFrom(
-            this.client.send('deliveries.findAll', {})
-        );
-        return deliveries;
+    @Get()
+    findAll() {
+        return this.deliveriesService.findAll();
     }
 
-    @MessagePattern('deliveries.findOne')
-    async findOne(@Payload() id: number) {
-        const delivery = await lastValueFrom(
-            this.client.send('deliveries.findOne', id)
-        );
-        return delivery;
+    @Get(':id')
+    findOne(@Param('id') id: string) {
+        return this.deliveriesService.findOne(id);
     }
 
-    @MessagePattern('deliveries.update')
-    async update(@Payload() updateDeliveryDto: CreateDeliveryDto) {
-        const delivery = await lastValueFrom(
-            this.client.send('deliveries.update', updateDeliveryDto)
-        );
-        return delivery;
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() updateDeliveryDto: CreateDeliveryDto) {
+        return this.deliveriesService.update(id, updateDeliveryDto);
     }
 
-    @MessagePattern('deliveries.delete')
-    async remove(@Payload() id: number) {
-        const delivery = await lastValueFrom(
-            this.client.send('deliveries.delete', id)
-        );
-        return delivery;
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.deliveriesService.remove(id);
     }
 }

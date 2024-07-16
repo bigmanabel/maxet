@@ -3,6 +3,7 @@ import { UsersController } from './users.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { USERS_SERVICE } from '@app/shared';
 import { AuthModule } from './auth/auth.module';
+import { UsersService } from './users.service';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
     ]),
     AuthModule
   ],
-  controllers: [UsersController]
+  controllers: [UsersController],
+  providers: [UsersService]
 })
 export class UsersModule {}

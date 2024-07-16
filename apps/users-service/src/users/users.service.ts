@@ -1,14 +1,18 @@
-import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { Status } from '@app/shared';
+import { ORDERS_SERVICE, Status } from '@app/shared';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private readonly userRepository: Repository<User>,) { }
+  constructor(
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @Inject(ORDERS_SERVICE) private readonly client: ClientProxy,
+) { }
 
   async findAll() {
     try {
@@ -110,10 +114,12 @@ export class UsersService {
         throw new NotFoundException('User not found');
       }
 
+      const orders = this.client.send('orders.findAll', { user: user.id });
+
       return {
         statusCode: HttpStatus.OK,
         message: 'Orders retrieved successfully',
-        data: user.customer.orders,
+        data: orders['data'],
       }
     } catch (error) {
       console.log(error);

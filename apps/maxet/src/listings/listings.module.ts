@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ListingsController } from './listings.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { LISTINGS_SERVICE } from '@app/shared';
+import { ListingsService } from './listings.service';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { LISTINGS_SERVICE } from '@app/shared';
       },
     ])
   ],
-  controllers: [ListingsController]
+  controllers: [ListingsController],
+  providers: [ListingsService]
 })
 export class ListingsModule { }

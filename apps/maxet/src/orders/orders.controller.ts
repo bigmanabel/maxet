@@ -1,53 +1,38 @@
-import { CreateOrderDto } from '@app/orders';
-import { Controller, Inject } from '@nestjs/common';
-import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
-import { ORDERS_SERVICE } from '@app/shared/constants/constants';
-import { lastValueFrom } from 'rxjs';
+import { CreateOrderDto, UpdateOrderDto } from '@app/orders';
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common';
+import { OrdersService } from './orders.service';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('orders')
 @Controller('orders')
 export class OrdersController {
     constructor(
-        @Inject(ORDERS_SERVICE) private readonly client: ClientProxy,
+        private readonly orderService: OrdersService,
     ) { }
 
-    @MessagePattern('orders.create')
-    async create(@Payload() createOrderDto: CreateOrderDto) {
-        const order = await lastValueFrom(
-            this.client.send('orders.create', createOrderDto)
-        );
-        return order;
+    @Post()
+    create(@Body() createOrderDto: CreateOrderDto) {
+        return this.orderService.create(createOrderDto);
     }
 
-    @MessagePattern('orders.findAll')
-    async findAll() {
-        const orders = await lastValueFrom(
-            this.client.send('orders.findAll', {})
-        );
-        return orders;
+    @Get()
+    findAll() {
+        return this.orderService.findAll();
     }
 
-    @MessagePattern('orders.findOne')
-    async findOne(@Payload() id: number) {
-        const order = await lastValueFrom(
-            this.client.send('orders.findOne', id)
-        );
-        return order;
+    @Get(':id')
+    findOne(@Param() id: string) {
+        return this.orderService.findOne(id);
     }
 
-    @MessagePattern('orders.update')
-    async update(@Payload() updateOrderDto: CreateOrderDto) {
-        const order = await lastValueFrom(
-            this.client.send('orders.update', updateOrderDto)
-        );
-        return order;
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
+        return this.orderService.update(id, updateOrderDto);
     }
 
-    @MessagePattern('orders.delete')
-    async remove(@Payload() id: number) {
-        const order = await lastValueFrom(
-            this.client.send('orders.delete', id)
-        );
-        return order;
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.orderService.remove(id);
     }
 }
 
