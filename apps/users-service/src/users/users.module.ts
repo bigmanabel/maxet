@@ -3,8 +3,6 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { CustomersModule } from './customers/customers.module';
-import { ShopOwnersModule } from './shop-owners/shop-owners.module';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ORDERS_SERVICE } from '@app/shared';
 
@@ -21,9 +19,8 @@ import { ORDERS_SERVICE } from '@app/shared';
       },
     ]),
     TypeOrmModule.forFeature([User]),
-    CustomersModule,
-    ShopOwnersModule],
+  ],
   controllers: [UsersController],
   providers: [UsersService],
 })
-export class UsersModule {}
+export class UsersModule { }

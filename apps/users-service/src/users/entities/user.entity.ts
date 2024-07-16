@@ -1,23 +1,30 @@
 import { Role } from "@app/users";
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Customer } from "../customers/entities/customer.entity";
-import { ShopOwner } from "../shop-owners/entities/shop-owner.entity";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { Status } from "@app/shared";
 
 
 @Entity('users')
-export class User { 
+export class User {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column({ unique: true })
     email: string;
 
-    @Column({nullable: true})
+    @Column({ nullable: true })
     password: string;
 
     @Column('enum', { enum: Role })
     role: Role;
+
+    @Column()
+    firstName: string;
+
+    @Column()
+    lastName: string;
+
+    @Column()
+    phoneNumber: string;
 
     @Column({ default: false })
     isTfaEnabled: boolean;
@@ -30,12 +37,4 @@ export class User {
 
     @Column('enum', { enum: Status, default: Status.Active })
     status: Status;
-
-    @OneToOne(() => Customer, customer => customer.user)
-    @JoinColumn()
-    customer?: Customer;
-
-    @OneToOne(() => ShopOwner, shopOwner => shopOwner.user)
-    @JoinColumn()
-    shopOwner?: ShopOwner;
 }
