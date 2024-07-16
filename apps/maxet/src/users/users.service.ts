@@ -12,28 +12,28 @@ export class UsersService {
 
     async findAll() {
         const users = await lastValueFrom(
-            this.client.send('user.findAll', {})
+            this.client.send('users.findAll', {})
         );
         return users;
     }
 
     async findOne(id: string) {
         const user = await lastValueFrom(
-            this.client.send('user.findOne', id)
+            this.client.send('users.findOne', id)
         );
         return user;
     }
 
     async update(id: string, updateUserDto: SignUpDto) {
         const user = await lastValueFrom(
-            this.client.send('user.update', { id, ...updateUserDto })
+            this.client.send('users.update', { id, ...updateUserDto })
         );
         return user;
     }
 
     async remove(id: string) {
         const user = await lastValueFrom(
-            this.client.send('user.delete', id)
+            this.client.send('users.delete', id)
         );
         return user;
     }

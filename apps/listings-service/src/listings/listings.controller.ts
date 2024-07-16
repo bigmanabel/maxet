@@ -1,36 +1,37 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { ListingsService } from './listings.service';
 import { CreateListingDto } from '@app/listings';
 import { UpdateListingDto } from '@app/listings';
 import { ApiTags } from '@nestjs/swagger';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @ApiTags('listings')
 @Controller('listings')
 export class ListingsController {
   constructor(private readonly listingsService: ListingsService) { }
 
-  @Post()
-  create(@Body() createListingDto: CreateListingDto) {
+  @MessagePattern('listings.create')
+  create(@Payload() createListingDto: CreateListingDto) {
     return this.listingsService.create(createListingDto);
   }
 
-  @Get()
+  @MessagePattern('listings.findAll')
   findAll() {
     return this.listingsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @MessagePattern('listings.findOne')
+  findOne(@Payload('id') id: string) {
     return this.listingsService.findOne(id);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateListingDto: UpdateListingDto) {
+  @MessagePattern('listings.update')
+  update(@Payload('id') id: string, @Payload() updateListingDto: UpdateListingDto) {
     return this.listingsService.update(id, updateListingDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @MessagePattern('listings.delete')
+  remove(@Payload('id') id: string) {
     return this.listingsService.remove(id);
   }
 }

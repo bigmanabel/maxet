@@ -1,34 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { DeliveriesService } from './deliveries.service';
-import { CreateDeliveryDto } from '../../../../libs/deliveries/src/dto/create-delivery.dto';
-import { UpdateDeliveryDto } from '../../../../libs/deliveries/src/dto/update-delivery.dto';
+import { CreateDeliveryDto, UpdateDeliveryDto } from '@app/deliveries';
+import { ApiTags } from '@nestjs/swagger';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
+@ApiTags('deliveries')
 @Controller('deliveries')
 export class DeliveriesController {
   constructor(private readonly deliveriesService: DeliveriesService) { }
 
-  @Post()
-  create(@Body() createDeliveryDto: CreateDeliveryDto) {
+  @MessagePattern('deliveries.create')
+  create(@Payload() createDeliveryDto: CreateDeliveryDto) {
     return this.deliveriesService.create(createDeliveryDto);
   }
 
-  @Get()
+  @MessagePattern('deliveries.findAll')
   findAll() {
     return this.deliveriesService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @MessagePattern('deliveries.findOne')
+  findOne(@Payload('id') id: string) {
     return this.deliveriesService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDeliveryDto: UpdateDeliveryDto) {
+  @MessagePattern('deliveries.update')
+  update(@Payload('id') id: string, @Payload() updateDeliveryDto: UpdateDeliveryDto) {
     return this.deliveriesService.update(id, updateDeliveryDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @MessagePattern('deliveries.delete')
+  remove(@Payload('id') id: string) {
     return this.deliveriesService.remove(id);
   }
 }

@@ -1,10 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
-import { SignUpDto } from '../../../../../libs/iam/src/dto/sign-up.dto';
-import { SignInDto } from '../../../../../libs/iam/src/dto/sign-in.dto';
 import { Auth } from './decorators/auth.decorator';
 import { AuthType } from './enums/auth-type.enum';
-import { RefreshTokenDto } from '../../../../../libs/iam/src/dto/refresh-token.dto';
 import { ActiveUser } from '../decorators/active-user.decorator';
 import { ActiveUserData } from '../interfaces/active-user-data.interface';
 import { OtpAuthenticationService } from './otp-authentication.service';
@@ -12,6 +9,8 @@ import { Response } from 'express';
 import { toFileStream } from 'qrcode';
 import { CreateCustomerDto, CreateShopOwnerDto } from '@app/users';
 import { ApiBody, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
+import { MessagePattern } from '@nestjs/microservices';
+import { RefreshTokenDto, SignInDto, SignUpDto } from '@app/iam';
 
 @Auth(AuthType.None)
 @Controller('auth')
@@ -43,26 +42,26 @@ export class AuthenticationController {
             required: ['signUpDto', 'userTypeDto']
         }
     })
-    @Post('sign-up')
+    @MessagePattern('auth.signUp')
     signUp(@Body() signUpDto: SignUpDto, @Body() userTypeDto: CreateCustomerDto | CreateShopOwnerDto) {
         return this.authenticationService.signUp(signUpDto, userTypeDto);
     }
 
     @HttpCode(HttpStatus.OK)
-    @Post('sign-in')
+    @MessagePattern('auth.signIn')
     signIn(@Body() signInDto: SignInDto) {
         return this.authenticationService.signIn(signInDto);
     }
 
     @HttpCode(HttpStatus.OK)
-    @Post('refresh-tokens')
+    @MessagePattern('auth.refreshTokens')
     refreshTokens(@Body() refreshTokenDto: RefreshTokenDto) {
         return this.authenticationService.refreshTokens(refreshTokenDto);
     }
 
     @Auth(AuthType.Bearer)
     @HttpCode(HttpStatus.OK)
-    @Post('2fa/generate')
+    @MessagePattern('2fa/generate')
     async generateQrCode(
         @ActiveUser() activeUser: ActiveUserData,
         @Res() response: Response,
