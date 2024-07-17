@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ListingsController } from './listings.controller';
+import { ShopsController } from './shops.controller';
+import { ShopsService } from './shops.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { LISTINGS_SERVICE } from '@app/shared';
-import { ListingsService } from './listings.service';
-import { ShopsModule } from './shops/shops.module';
 
 @Module({
   imports: [
@@ -17,9 +16,8 @@ import { ShopsModule } from './shops/shops.module';
         }
       },
     ]),
-    ShopsModule
   ],
-  controllers: [ListingsController],
-  providers: [ListingsService]
+  controllers: [ShopsController],
+  providers: [ShopsService]
 })
-export class ListingsModule { }
+export class ShopsModule {}

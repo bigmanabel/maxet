@@ -1,35 +1,36 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { ShopsService } from './shops.service';
 import { CreateShopDto, UpdateShopDto } from '@app/listings';
 import { ApiTags } from '@nestjs/swagger';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 
 @ApiTags('shops')
 @Controller('shops')
 export class ShopsController {
   constructor(private readonly shopsService: ShopsService) { }
 
-  @Post()
-  create(@Body() createShopDto: CreateShopDto) {
+  @MessagePattern('shops.create')
+  create(@Payload() createShopDto: CreateShopDto) {
     return this.shopsService.create(createShopDto);
   }
 
-  @Get()
+  @MessagePattern('shops.findAll')
   findAll() {
     return this.shopsService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
+  @MessagePattern('shops.findOne')
+  findOne(@Payload('id') id: string) {
     return this.shopsService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateShopDto: UpdateShopDto) {
+  @MessagePattern('shops.update')
+  update(@Payload('id') id: string, @Payload() updateShopDto: UpdateShopDto) {
     return this.shopsService.update(id, updateShopDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
+  @MessagePattern('shops.delete')
+  remove(@Payload('id') id: string) {
     return this.shopsService.remove(id);
   }
 }
