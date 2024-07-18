@@ -38,42 +38,49 @@ export class AuthenticationService {
         } catch (error) {
             const pgUniqueViolationErrorCode = '23505';
             if (error.code === pgUniqueViolationErrorCode) {
-                throw new ConflictException();
+                return new ConflictException('User aleady exists').getResponse();
             }
-            throw new BadRequestException(error.message);
+            return new BadRequestException(error.message).getResponse();
         }
     }
 
     async signIn(signInDto: SignInDto) {
-        const user = await this.userRepository.findOneBy({
-            email: signInDto.email,
-        });
+        try {
+            const user = await this.userRepository.findOneBy({
+                email: signInDto.email,
+            });
 
-        if (!user || user.status === Status.Inactive) {
-            throw new UnauthorizedException('User does not exist');
-        }
+            if (!user || user.status === Status.Inactive) {
+                return new UnauthorizedException('User does not exist');
+            }
 
-        const passwordIsValid = await this.hashingService.compare(
-            signInDto.password,
-            user.password,
-        );
-
-        if (!passwordIsValid) {
-            throw new UnauthorizedException('Password does not match');
-        }
-
-        if (user.isTfaEnabled) {
-            const isValid = this.otpAuthenticationService.verifyCode(
-                signInDto.tfaCode,
-                user.tfaSecret,
+            const passwordIsValid = await this.hashingService.compare(
+                signInDto.password,
+                user.password,
             );
 
-            if (!isValid) {
-                throw new UnauthorizedException('Invalid 2FA code');
+            if (!passwordIsValid) {
+                return new UnauthorizedException('Password does not match').getResponse();
             }
-        }
 
-        return await this.generateTokens(user);
+            if (user.isTfaEnabled) {
+                const isValid = this.otpAuthenticationService.verifyCode(
+                    signInDto.tfaCode,
+                    user.tfaSecret,
+                );
+
+                if (!isValid) {
+                    return new UnauthorizedException('Invalid 2FA code').getResponse();
+                }
+            }
+
+            return await this.generateTokens(user);
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                return new UnauthorizedException(error.message).getResponse();
+            }
+            return new BadRequestException(error.message).getResponse();
+        }
     }
 
     async generateTokens(user: User) {
@@ -119,15 +126,15 @@ export class AuthenticationService {
             if (isValid) {
                 await this.refreshTokenIdsStorage.invalidate(user.id);
             } else {
-                throw new Error('Refresh toekn is invalid');
+                return new UnauthorizedException('Refresh token is invalid').getResponse();
             }
 
             return await this.generateTokens(user);
         } catch (error) {
             if (error instanceof InvalidatedRefreshTokenError) {
-                throw new UnauthorizedException('Access denied');
+                return new UnauthorizedException('Access denied');
             }
-            throw new UnauthorizedException();
+            return new UnauthorizedException().getResponse();
         }
     }
 
