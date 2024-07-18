@@ -107,4 +107,25 @@ export class DeliveriesService {
       throw new BadRequestException(error.message);
     }
   }
+
+  async info(id: string) {
+    try {
+      const delivery = await this.deliveryRepository.findOneBy({ order: id });
+
+      if (!delivery) {
+        throw new NotFoundException('Delivery not found');
+      }
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Delivery retrieved successfully',
+        data: delivery,
+      }
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw new BadRequestException(error.message);
+    }
+  }
 }

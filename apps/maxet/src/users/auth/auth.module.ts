@@ -11,7 +11,7 @@ import { AuthService } from './auth.service';
         name: USERS_SERVICE,
         transport: Transport.RMQ,
         options: {
-          urls: [process.env.RMQ_URL],
+          urls: [process.env.RABBITMQ_URL],
           queue: 'users-service',
         },
       },

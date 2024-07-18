@@ -33,4 +33,9 @@ export class OrdersController {
   remove(@Payload() id: string) {
     return this.ordersService.remove(id);
   }
+
+  @MessagePattern('orders.deliveries')
+  deliveries(@Payload('id') id: string) {
+    return this.ordersService.deliveries(id);
+  }
 }

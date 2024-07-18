@@ -16,7 +16,10 @@ async function bootstrap() {
       transport: Transport.RMQ,
       options: {
         urls: [process.env.RABBITMQ_URL],
-        queue: 'users-service'
+        queue: 'users-service',
+        queueOptions: {
+          durable: true,
+        },
       },
     },
     { inheritAppConfig: true }

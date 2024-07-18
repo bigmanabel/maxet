@@ -20,6 +20,11 @@ export class UsersController {
         return this.usersService.findOne(id);
     }
 
+    @Get(':id/orders')
+    orders(@Param('id') id: string ){
+        return this.usersService.orders(id);
+    }
+
     @Patch(':id')
     update(@Param('id') id: string, @Body() updateUserDto: SignUpDto) {
         return this.usersService.update(id, updateUserDto)

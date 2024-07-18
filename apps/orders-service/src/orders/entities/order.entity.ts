@@ -8,7 +8,7 @@ export class Order {
     @Column('simple-array')
     listings: string[];
 
-    @Column('decimal', { scale: 9, precision: 2 })
+    @Column('decimal', { scale: 2, precision: 9 })
     totalAmount: number;
 
     @Column('timestamp')

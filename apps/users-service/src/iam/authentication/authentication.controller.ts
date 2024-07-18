@@ -7,9 +7,7 @@ import { ActiveUserData } from '../interfaces/active-user-data.interface';
 import { OtpAuthenticationService } from './otp-authentication.service';
 import { Response } from 'express';
 import { toFileStream } from 'qrcode';
-import { CreateCustomerDto, CreateShopOwnerDto } from '@app/users';
-import { ApiBody, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
-import { MessagePattern } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { RefreshTokenDto, SignInDto, SignUpDto } from '@app/iam';
 
 @Auth(AuthType.None)
@@ -18,19 +16,19 @@ export class AuthenticationController {
     constructor(private readonly authenticationService: AuthenticationService, private readonly otpAuthenticationService: OtpAuthenticationService) { }
 
     @MessagePattern('auth.signUp')
-    signUp(@Body() signUpDto: SignUpDto) {
+    signUp(@Payload() signUpDto: SignUpDto) {
         return this.authenticationService.signUp(signUpDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @MessagePattern('auth.signIn')
-    signIn(@Body() signInDto: SignInDto) {
+    signIn(@Payload() signInDto: SignInDto) {
         return this.authenticationService.signIn(signInDto);
     }
 
     @HttpCode(HttpStatus.OK)
     @MessagePattern('auth.refreshTokens')
-    refreshTokens(@Body() refreshTokenDto: RefreshTokenDto) {
+    refreshTokens(@Payload() refreshTokenDto: RefreshTokenDto) {
         return this.authenticationService.refreshTokens(refreshTokenDto);
     }
 

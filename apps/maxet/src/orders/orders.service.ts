@@ -44,4 +44,11 @@ export class OrdersService {
         );
         return order;
     }
+
+    async deliveries(id: string) {
+        const deliveries = await lastValueFrom(
+            this.client.send('orders.deliveries', id)
+        );
+        return deliveries;
+    }
 }

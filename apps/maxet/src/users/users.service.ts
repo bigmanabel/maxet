@@ -24,6 +24,13 @@ export class UsersService {
         return user;
     }
 
+    async orders(id: string) {
+        const orders = await lastValueFrom(
+            this.client.send('users.orders', id)
+        );
+        return orders;
+    }
+
     async update(id: string, updateUserDto: SignUpDto) {
         const user = await lastValueFrom(
             this.client.send('users.update', { id, ...updateUserDto })

@@ -1,14 +1,18 @@
-import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateOrderDto } from '../../../../libs/orders/src/dto/create-order.dto';
-import { UpdateOrderDto } from '../../../../libs/orders/src/dto/update-order.dto';
+import { BadRequestException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { CreateOrderDto, UpdateOrderDto } from '@app/orders';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
+import { DELIVERIES_SERVICE } from '@app/shared';
+import { ClientProxy } from '@nestjs/microservices';
+import { CreateDeliveryDto } from '@app/deliveries';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectRepository(Order) private readonly orderRepository: Repository<Order>,
+    @Inject(DELIVERIES_SERVICE) private readonly client: ClientProxy,
   ) { }
 
   async create(createOrderDto: CreateOrderDto) {
@@ -77,6 +81,29 @@ export class OrdersService {
       return {
         statusCode: HttpStatus.OK,
         message: 'Order updated successfully',
+      }
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async deliveries(id: string) {
+    try {
+      const order = await this.orderRepository.findOneBy({ id });
+
+      if (!order) {
+        throw new NotFoundException('Order not found');
+      }
+
+      const deliveries = this.client.send('deliveries.info', id)
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Order deliveries retrieved successfully',
+        data: deliveries['data'],
       }
     } catch (error) {
       if (error instanceof NotFoundException) {
