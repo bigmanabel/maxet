@@ -132,7 +132,7 @@ export class AuthenticationService {
             return await this.generateTokens(user);
         } catch (error) {
             if (error instanceof InvalidatedRefreshTokenError) {
-                return new UnauthorizedException('Access denied');
+                return new UnauthorizedException('Access denied').getResponse();
             }
             return new UnauthorizedException().getResponse();
         }
