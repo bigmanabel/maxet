@@ -1,14 +1,13 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
+import { Controller, HttpCode, HttpStatus, Res } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
-import { Auth } from './decorators/auth.decorator';
-import { AuthType } from './enums/auth-type.enum';
 import { ActiveUser } from '../decorators/active-user.decorator';
 import { ActiveUserData } from '../interfaces/active-user-data.interface';
 import { OtpAuthenticationService } from './otp-authentication.service';
 import { Response } from 'express';
 import { toFileStream } from 'qrcode';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { RefreshTokenDto, SignInDto, SignUpDto } from '@app/iam';
+import { AuthType, RefreshTokenDto, SignInDto, SignUpDto } from '@app/iam';
+import { Auth } from '@app/iam/authentication/decorators/auth.decorator';
 
 @Auth(AuthType.None)
 @Controller('auth')

@@ -6,16 +6,14 @@ import { AuthenticationService } from './authentication/authentication.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from '../../src/users/entities/user.entity';
 import { JwtModule } from '@nestjs/jwt';
-import jwtConfig from './config/jwt.config';
 import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
-import { AccessTokenGuard } from './authentication/guards/access-token.guard';
-import { AuthenticationGuard } from './authentication/guards/authentication.guard';
-import { RefreshTokenIdsStorage } from './authentication/refresh-token-ids.storage';
-import { RolesGuard } from './authorization/guards/roles.guard';
 import { OtpAuthenticationService } from './authentication/otp-authentication.service';
 import { GoogleAuthenticationService } from './authentication/social/google-authentication.service';
 import { GoogleAuthenticationController } from './authentication/social/google-authentication.controller';
+import jwtConfig from '@app/iam/config/jwt.config';
+import { RefreshTokenIdsStorage } from './authentication/refresh-token-ids.storage';
+import { AccessTokenGuard, AuthenticationGuard, RolesGuard } from '@app/iam';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -28,14 +26,14 @@ import { GoogleAuthenticationController } from './authentication/social/google-a
       provide: HashingService,
       useClass: BcryptService,
     },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: AuthenticationGuard,
-    // },
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: RolesGuard,
-    // },
+    {
+      provide: APP_GUARD,
+      useClass: AuthenticationGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
     AccessTokenGuard,
     RefreshTokenIdsStorage,
     AuthenticationService,

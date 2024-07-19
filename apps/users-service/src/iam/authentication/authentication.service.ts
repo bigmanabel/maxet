@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { HashingService } from '../hashing/hashing.service';
 import { SignUpDto, SignInDto, RefreshTokenDto } from '@app/iam';
 import { JwtService } from '@nestjs/jwt';
-import jwtConfig from '../config/jwt.config';
+import jwtConfig from '../../../../../libs/iam/src/config/jwt.config';
 import { ConfigType } from '@nestjs/config';
 import { ActiveUserData } from '../interfaces/active-user-data.interface';
 import { InvalidatedRefreshTokenError, RefreshTokenIdsStorage } from './refresh-token-ids.storage';

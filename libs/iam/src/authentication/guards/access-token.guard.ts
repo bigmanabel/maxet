@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import jwtConfig from '../../config/jwt.config';
 import { ConfigType } from '@nestjs/config';
 import { Request } from 'express';
-import { REQUEST_USER_KEY } from '../../iam.constants';
+import { REQUEST_USER_KEY } from '../../constants/iam.constants';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
@@ -14,7 +14,7 @@ export class AccessTokenGuard implements CanActivate {
 
   async canActivate(
     context: ExecutionContext,
-  ): Promise<boolean>  {
+  ): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromRequest(request);
     if (!token) {
