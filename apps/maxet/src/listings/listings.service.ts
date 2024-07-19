@@ -1,6 +1,6 @@
 import { CreateListingDto, UpdateListingDto } from '@app/listings';
 import { LISTINGS_SERVICE } from '@app/shared';
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 
@@ -11,37 +11,72 @@ export class ListingsService {
     ) { }
 
     async create(createListingDto: CreateListingDto) {
-        const listing = await lastValueFrom(
-            this.client.send('listings.create', createListingDto)
-        );
-        return listing;
+        try {
+            const listing = await lastValueFrom(
+                this.client.send('listings.create', createListingDto)
+            );
+            return listing;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 
     async findAll() {
-        const listings = await lastValueFrom(
-            this.client.send('listings.findAll', {})
-        );
-        return listings;
+        try {
+            const listings = await lastValueFrom(
+                this.client.send('listings.findAll', {})
+            );
+            return listings;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 
     async findOne(id: string) {
-        const listing = await lastValueFrom(
-            this.client.send('listings.findOne', id)
-        );
-        return listing;
+        try {
+            const listing = await lastValueFrom(
+                this.client.send('listings.findOne', id)
+            );
+            return listing;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 
     async update(id: string, updateListingDto: UpdateListingDto) {
-        const listing = await lastValueFrom(
-            this.client.send('listings.update', { id, ...updateListingDto })
-        );
-        return listing;
+        try {
+            const listing = await lastValueFrom(
+                this.client.send('listings.update', { id, ...updateListingDto })
+            );
+            return listing;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 
     async remove(id: string) {
-        const listing = await lastValueFrom(
-            this.client.send('listings.delete', id)
-        );
-        return listing;
+        try {
+            const listing = await lastValueFrom(
+                this.client.send('listings.delete', id)
+            );
+            return listing;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { CreateDeliveryDto, UpdateDeliveryDto } from '@app/deliveries';
 import { DELIVERIES_SERVICE } from '@app/shared';
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 
@@ -8,40 +8,75 @@ import { lastValueFrom } from 'rxjs';
 export class DeliveriesService {
     constructor(
         @Inject(DELIVERIES_SERVICE) private readonly client: ClientProxy,
-    ) {}
+    ) { }
 
     async create(createDeliveryDto: CreateDeliveryDto) {
-        const delivery = await lastValueFrom(
-            this.client.send('deliveries.create', createDeliveryDto)
-        );
-        return delivery;
+        try {
+            const delivery = await lastValueFrom(
+                this.client.send('deliveries.create', createDeliveryDto)
+            );
+            return delivery;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 
     async findAll() {
-        const deliveries = await lastValueFrom(
-            this.client.send('deliveries.findAll', {})
-        );
-        return deliveries;
+        try {
+            const deliveries = await lastValueFrom(
+                this.client.send('deliveries.findAll', {})
+            );
+            return deliveries;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 
     async findOne(id: string) {
-        const delivery = await lastValueFrom(
-            this.client.send('deliveries.findOne', id)
-        );
-        return delivery;
+        try {
+            const delivery = await lastValueFrom(
+                this.client.send('deliveries.findOne', id)
+            );
+            return delivery;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 
     async update(id: string, updateDeliveryDto: UpdateDeliveryDto) {
-        const delivery = await lastValueFrom(
-            this.client.send('deliveries.update', { id, ...updateDeliveryDto })
-        );
-        return delivery;
+        try {
+            const delivery = await lastValueFrom(
+                this.client.send('deliveries.update', { id, ...updateDeliveryDto })
+            );
+            return delivery;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 
     async remove(id: string) {
-        const delivery = await lastValueFrom(
-            this.client.send('deliveries.delete', id)
-        );
-        return delivery;
+        try {
+            const delivery = await lastValueFrom(
+                this.client.send('deliveries.delete', id)
+            );
+            return delivery;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 }

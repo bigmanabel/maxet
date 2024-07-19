@@ -1,6 +1,6 @@
 import { CreateOrderDto, UpdateOrderDto } from '@app/orders';
 import { ORDERS_SERVICE } from '@app/shared';
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy, Payload } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 
@@ -8,47 +8,89 @@ import { lastValueFrom } from 'rxjs';
 export class OrdersService {
     constructor(
         @Inject(ORDERS_SERVICE) private readonly client: ClientProxy,
-    ) {}
+    ) { }
 
     async create(createOrderDto: CreateOrderDto) {
-        const order = await lastValueFrom(
-            this.client.send('orders.create', createOrderDto)
-        );
-        return order;
+        try {
+            const order = await lastValueFrom(
+                this.client.send('orders.create', createOrderDto)
+            );
+            return order;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 
     async findAll() {
-        const orders = await lastValueFrom(
-            this.client.send('orders.findAll', {})
-        );
-        return orders;
+        try {
+            const orders = await lastValueFrom(
+                this.client.send('orders.findAll', {})
+            );
+            return orders;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 
     async findOne(id: string) {
-        const order = await lastValueFrom(
-            this.client.send('orders.findOne', id)
-        );
-        return order;
+        try {
+            const order = await lastValueFrom(
+                this.client.send('orders.findOne', id)
+            );
+            return order;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 
     async update(id: string, updateOrderDto: UpdateOrderDto) {
-        const order = await lastValueFrom(
-            this.client.send('orders.update', { id, ...updateOrderDto })
-        );
-        return order;
+        try {
+            const order = await lastValueFrom(
+                this.client.send('orders.update', { id, ...updateOrderDto })
+            );
+            return order;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 
     async remove(id: string) {
-        const order = await lastValueFrom(
-            this.client.send('orders.delete', id)
-        );
-        return order;
+        try {
+            const order = await lastValueFrom(
+                this.client.send('orders.delete', id)
+            );
+            return order;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 
     async deliveries(id: string) {
-        const deliveries = await lastValueFrom(
-            this.client.send('orders.deliveries', id)
-        );
-        return deliveries;
+        try {
+            const deliveries = await lastValueFrom(
+                this.client.send('orders.deliveries', id)
+            );
+            return deliveries;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
     }
 }

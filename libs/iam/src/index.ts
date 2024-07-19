@@ -7,3 +7,7 @@ export * from './authentication/guards/authentication.guard';
 export * from './authorization/guards/roles.guard';
 export * from './authorization/decorators/roles.decorator';
 export * from './authentication/enums/auth-type.enum';
+export * from './authentication/decorators/auth.decorator';
+export * from './constants/iam.constants';
+export * from './config/jwt.config';
+

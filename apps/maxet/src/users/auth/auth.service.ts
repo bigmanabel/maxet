@@ -11,7 +11,6 @@ export class AuthService {
     ) { }
 
     async signUp(signUpDto: SignUpDto) {
-        
         const user = await lastValueFrom(
             this.client.send('auth.signUp', signUpDto)
         );

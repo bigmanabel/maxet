@@ -1,9 +1,10 @@
-import { RefreshTokenDto, SignInDto, SignUpDto } from '@app/iam';
+import { Auth, AuthType, RefreshTokenDto, SignInDto, SignUpDto } from '@app/iam';
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('auth')
+@Auth(AuthType.None)
 @Controller('auth')
 export class AuthController {
     constructor(
