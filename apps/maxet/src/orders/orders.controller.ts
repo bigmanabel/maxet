@@ -1,5 +1,5 @@
 import { CreateOrderDto, UpdateOrderDto } from '@app/orders';
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Put, Post } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -30,7 +30,7 @@ export class OrdersController {
         return this.orderService.deliveries(id);
     }
 
-    @Patch(':id')
+    @Put(':id')
     update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
         return this.orderService.update(id, updateOrderDto);
     }

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, Post } from '@nestjs/common';
 import { ShopsService } from './shops.service';
 import { CreateShopDto, UpdateShopDto } from '@app/listings';
 import { ApiTags } from '@nestjs/swagger';
@@ -25,7 +25,7 @@ export class ShopsController {
         return this.shopService.findOne(id);
     }
 
-    @Patch(':id')
+    @Put(':id')
     update(@Param('id') id: string, @Body() updateShopDto: UpdateShopDto) {
         return this.shopService.update(id, updateShopDto);
     }

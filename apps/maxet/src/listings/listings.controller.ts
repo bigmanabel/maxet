@@ -1,5 +1,5 @@
 import { CreateListingDto, UpdateListingDto } from '@app/listings';
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, Post } from '@nestjs/common';
 import { ListingsService } from './listings.service';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -25,7 +25,7 @@ export class ListingsController {
         return this.listingsService.findOne(id);
     }
 
-    @Patch(':id')
+    @Put(':id')
     update(@Param('id') id: string, @Body() updateListingDto: UpdateListingDto) {
         return this.listingsService.update(id, updateListingDto);
     }

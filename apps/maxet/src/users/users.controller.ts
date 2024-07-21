@@ -1,5 +1,5 @@
 import { SignUpDto } from '@app/iam';
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiTags } from '@nestjs/swagger';
 
@@ -8,7 +8,7 @@ import { ApiTags } from '@nestjs/swagger';
 export class UsersController {
     constructor(
         private readonly usersService: UsersService,
-    ) {} 
+    ) { }
 
     @Get()
     findAll() {
@@ -21,11 +21,11 @@ export class UsersController {
     }
 
     @Get(':id/orders')
-    orders(@Param('id') id: string ){
+    orders(@Param('id') id: string) {
         return this.usersService.orders(id);
     }
 
-    @Patch(':id')
+    @Put(':id')
     update(@Param('id') id: string, @Body() updateUserDto: SignUpDto) {
         return this.usersService.update(id, updateUserDto)
     }
