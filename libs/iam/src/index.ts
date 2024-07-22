@@ -10,4 +10,7 @@ export * from './authentication/enums/auth-type.enum';
 export * from './authentication/decorators/auth.decorator';
 export * from './constants/iam.constants';
 export * from './config/jwt.config';
+export * from './interfaces/active-user-data.interface';
+export * from './decorators/active-user.decorator';
+export * from './config/jwt.config';
 

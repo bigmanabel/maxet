@@ -3,17 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { HashingService } from '../hashing/hashing.service';
-import { SignUpDto, SignInDto, RefreshTokenDto } from '@app/iam';
+import { SignUpDto, SignInDto, RefreshTokenDto, ActiveUserData } from '@app/iam';
 import { JwtService } from '@nestjs/jwt';
-import jwtConfig from '../../../../../libs/iam/src/config/jwt.config';
 import { ConfigType } from '@nestjs/config';
-import { ActiveUserData } from '../interfaces/active-user-data.interface';
 import { InvalidatedRefreshTokenError, RefreshTokenIdsStorage } from './refresh-token-ids.storage';
 import { randomUUID } from 'crypto';
 import { OtpAuthenticationService } from './otp-authentication.service';
-import { CreateCustomerDto, CreateShopOwnerDto, Role } from '@app/users';
 import { Status } from '@app/shared';
-
+import jwtConfig from '@app/iam/config/jwt.config';
 @Injectable()
 export class AuthenticationService {
     constructor(
