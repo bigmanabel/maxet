@@ -1,8 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { DeliveriesService } from './deliveries.service';
-import { CreateDeliveryDto, UpdateDeliveryDto } from '@app/deliveries';
+import { CreateDeliveryDto, DeliveryQueryDto, UpdateDeliveryDto } from '@app/deliveries';
 import { ApiTags } from '@nestjs/swagger';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { PaginationQueryDto } from '@app/shared';
 
 @ApiTags('deliveries')
 @Controller('deliveries')
@@ -15,8 +16,8 @@ export class DeliveriesController {
   }
 
   @MessagePattern('deliveries.findAll')
-  findAll() {
-    return this.deliveriesService.findAll();
+  findAll(@Payload() paginationQueryDto: PaginationQueryDto, @Payload() deliveryQueryDto: DeliveryQueryDto) {
+    return this.deliveriesService.findAll(paginationQueryDto, deliveryQueryDto);
   }
 
   @MessagePattern('deliveries.findOne')

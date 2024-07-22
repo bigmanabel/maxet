@@ -1,7 +1,8 @@
-import { CreateDeliveryDto, UpdateDeliveryDto } from '@app/deliveries';
-import { Body, Controller, Delete, Get, Param, Put, Post } from '@nestjs/common';
+import { CreateDeliveryDto, DeliveryQueryDto, UpdateDeliveryDto } from '@app/deliveries';
+import { Body, Controller, Delete, Get, Param, Put, Post, Query } from '@nestjs/common';
 import { DeliveriesService } from './deliveries.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { PaginationQueryDto } from '@app/shared';
 
 @ApiBearerAuth()
 @ApiTags('deliveries')
@@ -17,8 +18,8 @@ export class DeliveriesController {
     }
 
     @Get()
-    findAll() {
-        return this.deliveriesService.findAll();
+    findAll(@Query() paginationQueryDto: PaginationQueryDto, @Query() deliveryQueryDto: DeliveryQueryDto) {
+        return this.deliveriesService.findAll(paginationQueryDto, deliveryQueryDto);
     }
 
     @Get(':id')

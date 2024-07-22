@@ -1,5 +1,5 @@
-import { CreateOrderDto, UpdateOrderDto } from '@app/orders';
-import { ORDERS_SERVICE } from '@app/shared';
+import { CreateOrderDto, OrderQueryDto, UpdateOrderDto } from '@app/orders';
+import { ORDERS_SERVICE, PaginationQueryDto } from '@app/shared';
 import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy, Payload } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
@@ -24,10 +24,10 @@ export class OrdersService {
         }
     }
 
-    async findAll() {
+    async findAll(paginationQueryDto: PaginationQueryDto, orderQueryDto: OrderQueryDto) {
         try {
             const orders = await lastValueFrom(
-                this.client.send('orders.findAll', {})
+                this.client.send('orders.findAll', { paginationQueryDto, orderQueryDto })
             );
             return orders;
         } catch (error) {

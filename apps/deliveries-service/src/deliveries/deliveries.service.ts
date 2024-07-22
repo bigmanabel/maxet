@@ -3,7 +3,9 @@ import { CreateDeliveryDto } from '../../../../libs/deliveries/src/dto/create-de
 import { UpdateDeliveryDto } from '../../../../libs/deliveries/src/dto/update-delivery.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Delivery } from './entities/delivery.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Like, Repository } from 'typeorm';
+import { PaginationQueryDto } from '@app/shared';
+import { DeliveryQueryDto } from '@app/deliveries';
 
 @Injectable()
 export class DeliveriesService {
@@ -29,9 +31,22 @@ export class DeliveriesService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationQueryDto: PaginationQueryDto, deliveryQueryDto: DeliveryQueryDto) {
+    const { limit, offset } = paginationQueryDto;
+    const { carrier, order, estimatedDeliveryDate } = deliveryQueryDto;
+
+    const conditions: FindOptionsWhere<Delivery> | FindOptionsWhere<Delivery[]> = {
+      ...(carrier ? { carrier: Like(`%${carrier}%`) } : {}),
+      ...(order ? { order: order } : {}),
+      ...(estimatedDeliveryDate ? { estimatedDeliveryDate: estimatedDeliveryDate } : {}),
+    }
+
     try {
-      const deliveries = await this.deliveryRepository.find();
+      const deliveries = await this.deliveryRepository.find({
+        where: conditions,
+        take: limit,
+        skip: offset,
+      });
 
       return {
         statusCode: HttpStatus.OK,

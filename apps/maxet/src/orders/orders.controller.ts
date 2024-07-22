@@ -1,7 +1,8 @@
-import { CreateOrderDto, UpdateOrderDto } from '@app/orders';
-import { Body, Controller, Delete, Get, Inject, Param, Put, Post } from '@nestjs/common';
+import { CreateOrderDto, OrderQueryDto, UpdateOrderDto } from '@app/orders';
+import { Body, Controller, Delete, Get, Inject, Param, Put, Post, Query } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { PaginationQueryDto } from '@app/shared';
 
 @ApiBearerAuth()
 @ApiTags('orders')
@@ -17,8 +18,8 @@ export class OrdersController {
     }
 
     @Get()
-    findAll() {
-        return this.orderService.findAll();
+    findAll(@Query() paginationQueryDto: PaginationQueryDto, @Query() orderQueryDto: OrderQueryDto) {
+        return this.orderService.findAll(paginationQueryDto, orderQueryDto);
     }
 
     @Get(':id')
