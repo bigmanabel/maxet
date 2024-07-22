@@ -1,8 +1,9 @@
 import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Listing } from './entities/listing.entity';
-import { Like, Repository } from 'typeorm';
-import { CreateListingDto, UpdateListingDto } from '@app/listings';
+import { Between, FindOptionsWhere, Like, Repository } from 'typeorm';
+import { CreateListingDto, ListingsQueryDto, UpdateListingDto } from '@app/listings';
+import { PaginationQueryDto } from '@app/shared';
 
 @Injectable()
 export class ListingsService {
@@ -31,9 +32,22 @@ export class ListingsService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationQueryDto: PaginationQueryDto, listingsQueryDto: ListingsQueryDto) {
+    const { limit, offset } = paginationQueryDto;
+    const { name, priceMin, priceMax, description, shop } = listingsQueryDto;
+
+    const conditions: FindOptionsWhere<Listing> | FindOptionsWhere<Listing[]> = {
+      ...(name ? { name: Like(`%${name}%`) } : {}),
+      ...(description ? { description: Like(`%${description}%`) } : {}),
+      ...(priceMin && priceMax ? { price: Between(priceMin, priceMax) } : {}),
+      ...(shop ? { shop: { name: Like(`%${shop}%`) } } : {}),
+    }
+
     try {
       const listings = await this.listingRepository.find({
+        where: conditions,
+        take: limit,
+        skip: offset,
         relations: ['shop']
       });
 

@@ -1,8 +1,8 @@
-import { CreateShopDto, UpdateShopDto } from '@app/listings';
-import { LISTINGS_SERVICE } from '@app/shared';
-import { Inject, Injectable } from '@nestjs/common';
+import { CreateShopDto, ShopQueryDto, UpdateShopDto } from '@app/listings';
+import { LISTINGS_SERVICE, PaginationQueryDto } from '@app/shared';
+import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, of } from 'rxjs';
 
 @Injectable()
 export class ShopsService {
@@ -11,44 +11,86 @@ export class ShopsService {
     ) { }
 
     async create(createShopDto: CreateShopDto) {
-        const shop = await lastValueFrom(
-            this.client.send('shops.create', createShopDto)
-        );
-        return shop;
+        try {
+            const shop = await lastValueFrom(
+                this.client.send('shops.create', createShopDto)
+            );
+            return shop;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.message);
+        }
     }
 
-    async findAll() {
-        const shop = await lastValueFrom(
-            this.client.send('shops.findAll', {})
-        );
-        return shop;
+    async findAll(paginationQueryDto: PaginationQueryDto, shopQueryDto: ShopQueryDto) {
+        try {
+            const shop = await lastValueFrom(
+                this.client.send('shops.findAll', { paginationQueryDto, shopQueryDto })
+            );
+            return shop;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.message);
+        }
     }
 
     async findOne(id: string) {
-        const shop = await lastValueFrom(
-            this.client.send('shops.findOne', id)
-        );
-        return shop;
+        try {
+            const shop = await lastValueFrom(
+                this.client.send('shops.findOne', id)
+            );
+            return shop;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.message);
+        }
     }
 
     async listings(id: string) {
-        const shop = await lastValueFrom(
-            this.client.send('shops.listings', id)
-        );
-        return shop;
+        try {
+            const shop = await lastValueFrom(
+                this.client.send('shops.listings', id)
+            );
+            return shop;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.message);
+        }
     }
 
     async update(id: string, updateShopDto: UpdateShopDto) {
-        const shop = await lastValueFrom(
-            this.client.send('shops.update', { id, ...updateShopDto })
-        );
-        return shop;
+        try {
+            const shop = await lastValueFrom(
+                this.client.send('shops.update', { id, ...updateShopDto })
+            );
+            return shop;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.message);
+        }
     }
 
     async remove(id: string) {
-        const shop = await lastValueFrom(
-            this.client.send('shops.delete', id)
-        );
-        return shop;
+        try {
+            const shop = await lastValueFrom(
+                this.client.send('shops.delete', id)
+            );
+            return shop;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.message);
+        }
     }
 }

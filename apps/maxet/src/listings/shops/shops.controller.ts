@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, Param, Put, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, Post, Query } from '@nestjs/common';
 import { ShopsService } from './shops.service';
-import { CreateShopDto, UpdateShopDto } from '@app/listings';
+import { CreateShopDto, ShopQueryDto, UpdateShopDto } from '@app/listings';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { PaginationQueryDto } from '@app/shared';
 
 @ApiBearerAuth()
 @ApiTags('shops')
@@ -17,8 +18,8 @@ export class ShopsController {
     }
 
     @Get()
-    findAll() {
-        return this.shopService.findAll();
+    findAll(@Query() paginationQueryDto: PaginationQueryDto, @Query() shopQueryDto: ShopQueryDto) {
+        return this.shopService.findAll(paginationQueryDto, shopQueryDto);
     }
 
     @Get(':id')

@@ -1,9 +1,9 @@
 import { BadRequestException, HttpStatus, Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateOrderDto, UpdateOrderDto } from '@app/orders';
+import { CreateOrderDto, OrderQueryDto, UpdateOrderDto } from '@app/orders';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
-import { Repository } from 'typeorm';
-import { DELIVERIES_SERVICE } from '@app/shared';
+import { Between, FindOptionsWhere, Repository } from 'typeorm';
+import { DELIVERIES_SERVICE, PaginationQueryDto } from '@app/shared';
 import { ClientProxy } from '@nestjs/microservices';
 import { CreateDeliveryDto } from '@app/deliveries';
 import { lastValueFrom } from 'rxjs';
@@ -33,9 +33,22 @@ export class OrdersService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationQueryDto: PaginationQueryDto, orderQueryDto: OrderQueryDto) {
+    const { limit, offset } = paginationQueryDto;
+    const { totalAmountMin, totalAmountMax, deliveryDate, deliveryAddress } = orderQueryDto;
+
+    const conditions: FindOptionsWhere<Order> | FindOptionsWhere<Order[]> = {
+      ...(totalAmountMin && totalAmountMax ? { totalAmount: Between(totalAmountMin, totalAmountMax) } : {}),
+      ...(deliveryDate ? { deliveryDate: deliveryDate } : {}),
+      ...(deliveryAddress ? { deliveryAddress: deliveryAddress } : {}),
+    }
+
     try {
-      const orders = await this.orderRepository.find();
+      const orders = await this.orderRepository.find({
+        where: conditions,
+        take: limit,
+        skip: offset,
+      });
 
       return {
         statusCode: HttpStatus.OK,

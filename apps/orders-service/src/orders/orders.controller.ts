@@ -1,8 +1,9 @@
 import { Controller } from '@nestjs/common';
 import { OrdersService } from './orders.service';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateOrderDto, UpdateOrderDto } from '@app/orders';
+import { CreateOrderDto, OrderQueryDto, UpdateOrderDto } from '@app/orders';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { PaginationQueryDto } from '@app/shared';
 
 @ApiTags('orders')
 @Controller('orders')
@@ -15,8 +16,8 @@ export class OrdersController {
   }
 
   @MessagePattern('orders.findAll')
-  findAll() {
-    return this.ordersService.findAll();
+  findAll(@Payload() paginationQueryDto: PaginationQueryDto, @Payload() orderQueryDto: OrderQueryDto) {
+    return this.ordersService.findAll(paginationQueryDto, orderQueryDto);
   }
 
   @MessagePattern('orders.findOne')

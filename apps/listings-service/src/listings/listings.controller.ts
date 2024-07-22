@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { ListingsService } from './listings.service';
-import { CreateListingDto } from '@app/listings';
+import { CreateListingDto, ListingsQueryDto } from '@app/listings';
 import { UpdateListingDto } from '@app/listings';
 import { ApiTags } from '@nestjs/swagger';
 import { MessagePattern, Payload } from '@nestjs/microservices';
-import { Auth, AuthType } from '@app/iam';
+import { PaginationQueryDto } from '@app/shared';
 
 @ApiTags('listings')
 @Controller('listings')
@@ -17,8 +17,8 @@ export class ListingsController {
   }
 
   @MessagePattern('listings.findAll')
-  findAll() {
-    return this.listingsService.findAll();
+  findAll(@Payload() paginationQueryDto: PaginationQueryDto, @Payload() listingsQueryDto: ListingsQueryDto) {
+    return this.listingsService.findAll(paginationQueryDto, listingsQueryDto);
   }
 
   @MessagePattern('listings.findOne')

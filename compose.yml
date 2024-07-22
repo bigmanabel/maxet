@@ -20,11 +20,6 @@ services:
       - JWT_ACCESS_TOKEN_TTL=3600
       - JWT_REFRESH_TOKEN_TTL=86400
       - RABBITMQ_URL=amqp://rabbitmq:5672
-      - USER_SERVICE_URL=http://users-service:3004
-      - LISTINGS_SERVICE_URL=http://listings-service:3002
-      - ORDERS_SERVICE_URL=http://orders-service:3003
-      - DELIVERIES_SERVICE_URL=http://deliveries-service:3001
-
     volumes:        
       - ./libs:/usr/src/app/libs
       - ./package.json:/usr/src/app/package.json

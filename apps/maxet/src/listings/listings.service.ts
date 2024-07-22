@@ -1,5 +1,5 @@
-import { CreateListingDto, UpdateListingDto } from '@app/listings';
-import { LISTINGS_SERVICE } from '@app/shared';
+import { CreateListingDto, ListingsQueryDto, UpdateListingDto } from '@app/listings';
+import { LISTINGS_SERVICE, PaginationQueryDto } from '@app/shared';
 import { BadRequestException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
@@ -24,11 +24,12 @@ export class ListingsService {
         }
     }
 
-    async findAll() {
+    async findAll(paginationQueryDto: PaginationQueryDto, listingsQueryDto: ListingsQueryDto) {
         try {
             const listings = await lastValueFrom(
-                this.client.send('listings.findAll', {})
+                this.client.send('listings.findAll', { paginationQueryDto, listingsQueryDto})
             );
+
             return listings;
         } catch (error) {
             if (error instanceof UnauthorizedException) {

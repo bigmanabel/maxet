@@ -1,9 +1,9 @@
 import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateShopDto, UpdateShopDto } from '@app/listings';
+import { CreateShopDto, ShopQueryDto, UpdateShopDto } from '@app/listings';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Shop } from './entities/shop.entity';
-import { Repository } from 'typeorm';
-import { Status } from '@app/shared';
+import { FindOptionsWhere, Like, Repository } from 'typeorm';
+import { PaginationQueryDto, Status } from '@app/shared';
 
 @Injectable()
 export class ShopsService {
@@ -29,9 +29,22 @@ export class ShopsService {
     }
   }
 
-  async findAll() {
+  async findAll(paginationQueryDto: PaginationQueryDto, shopQueryDto: ShopQueryDto) {
+    const { limit, offset } = paginationQueryDto;
+    const { name, bio, location, /*owner*/ } = shopQueryDto;
+
+    const conditions: FindOptionsWhere<Shop> | FindOptionsWhere<Shop[]> = {
+      ...(name ? { name: Like(`%${name}%`) } : {}),
+      ...(bio ? { bio: Like(`%${bio}%`) } : {}),
+      ...(location ? { location: Like(`%${location}%`) } : {}),
+      // ...(owner ? { owner: owner } : {}),
+    }
+
     try {
       const shops = await this.shopRepository.find({
+        where: conditions,
+        take: limit,
+        skip: offset,
         relations: ['listings'],
       });
 
@@ -143,3 +156,4 @@ export class ShopsService {
     }
   }
 }
+
