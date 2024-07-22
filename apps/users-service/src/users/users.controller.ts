@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Put, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { MessagePattern } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { Auth, AuthType } from '@app/iam';
 
 @Auth(AuthType.None)
@@ -15,22 +15,22 @@ export class UsersController {
   }
 
   @MessagePattern('users.findOne')
-  findOne(@Param('id') id: string) {
+  findOne(@Payload('id') id: string) {
     return this.usersService.findOne(id);
   }
 
   @MessagePattern('users.orders')
-  orders(@Param('id') id: string) {
+  orders(@Payload('id') id: string) {
     return this.usersService.orders(id);
   }
 
   @MessagePattern('users.update')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  update(@Payload('id') id: string, @Payload() updateUserDto: UpdateUserDto) {
     return this.usersService.update(id, updateUserDto);
   }
 
   @MessagePattern('users.delete')
-  remove(@Param('id') id: string) {
+  remove(@Payload('id') id: string) {
     return this.usersService.remove(id);
   }
 }

@@ -1,8 +1,9 @@
 import { Body, Controller, Delete, Get, Param, Put, Post } from '@nestjs/common';
 import { ShopsService } from './shops.service';
 import { CreateShopDto, UpdateShopDto } from '@app/listings';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiTags('shops')
 @Controller('shops')
 export class ShopsController {
@@ -23,6 +24,11 @@ export class ShopsController {
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.shopService.findOne(id);
+    }
+
+    @Get(':id/listings')
+    listings(@Param('id') id: string) {
+        return this.shopService.listings(id);
     }
 
     @Put(':id')

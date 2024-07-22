@@ -1,8 +1,10 @@
 import { CreateListingDto, UpdateListingDto } from '@app/listings';
-import { Body, Controller, Delete, Get, Param, Put, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, Post, Query } from '@nestjs/common';
 import { ListingsService } from './listings.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { Auth, AuthType } from '@app/iam';
 
+@ApiBearerAuth()
 @ApiTags('listings')
 @Controller('listings')
 export class ListingsController {
@@ -33,5 +35,11 @@ export class ListingsController {
     @Delete(':id')
     remove(@Param('id') id: string) {
         return this.listingsService.remove(id);
+    }
+
+    @Auth(AuthType.None)
+    @Get('search')
+    search(@Query('query') query: string) {
+        return this.listingsService.search(query);
     }
 }

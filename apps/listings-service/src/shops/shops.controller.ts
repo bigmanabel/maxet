@@ -33,4 +33,9 @@ export class ShopsController {
   remove(@Payload('id') id: string) {
     return this.shopsService.remove(id);
   }
+
+  @MessagePattern('shops.listings')
+  listings(@Payload('id') id: string) {
+    return this.shopsService.listings(id);
+  }
 }

@@ -11,6 +11,7 @@ async function bootstrap() {
     .setTitle('Maxet API Gateway')
     .setDescription('Maxet API Gateway built with NestJS')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, options);

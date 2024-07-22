@@ -1,8 +1,9 @@
 import { CreateDeliveryDto, UpdateDeliveryDto } from '@app/deliveries';
 import { Body, Controller, Delete, Get, Param, Put, Post } from '@nestjs/common';
 import { DeliveriesService } from './deliveries.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiTags('deliveries')
 @Controller('deliveries')
 export class DeliveriesController {

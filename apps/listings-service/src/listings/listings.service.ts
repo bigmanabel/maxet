@@ -1,9 +1,8 @@
 import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateListingDto } from '../../../../libs/listings/src/dto/create-listing.dto';
-import { UpdateListingDto } from '../../../../libs/listings/src/dto/update-listing.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Listing } from './entities/listing.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
+import { CreateListingDto, UpdateListingDto } from '@app/listings';
 
 @Injectable()
 export class ListingsService {
@@ -115,6 +114,26 @@ export class ListingsService {
       if (error instanceof NotFoundException) {
         throw new NotFoundException(error.message);
       }
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  async search(query: string) {
+    try {
+      const listings = await this.listingRepository.find({
+        where: [
+          { name: Like(`%${query}%`) },
+          { description: Like(`%${query}%`) },
+        ],
+        relations: ['shop'],
+      });
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Listings retrieved successfully',
+        data: listings
+      }
+    } catch (error) {
       throw new BadRequestException(error.message);
     }
   }

@@ -1,6 +1,8 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
+import { Auth, AuthType } from '@app/iam';
 
+@Auth(AuthType.None)
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}

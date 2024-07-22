@@ -1,8 +1,9 @@
 import { CreateOrderDto, UpdateOrderDto } from '@app/orders';
 import { Body, Controller, Delete, Get, Inject, Param, Put, Post } from '@nestjs/common';
 import { OrdersService } from './orders.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @ApiTags('orders')
 @Controller('orders')
 export class OrdersController {

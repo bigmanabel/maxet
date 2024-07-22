@@ -7,7 +7,7 @@ import { OrdersModule } from './orders/orders.module';
 import { DeliveriesModule } from './deliveries/deliveries.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard, AuthenticationGuard, RolesGuard } from '@app/iam';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from '@app/iam/config/jwt.config';
 import { ConfigModule } from '@nestjs/config';
 

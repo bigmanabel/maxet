@@ -116,4 +116,30 @@ export class ShopsService {
       throw new BadRequestException(error.message);
     }
   }
+
+  async listings(id: string) {
+    try {
+      const shop = await this.shopRepository.findOne({
+        where: {
+          id
+        },
+        relations: ['listings'],
+      });
+
+      if (!shop) {
+        throw new NotFoundException('Shop not found');
+      }
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Shop listings retrieved successfully',
+        data: shop.listings,
+      }
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message)
+      }
+      throw new BadRequestException(error.message);
+    }
+  }
 }

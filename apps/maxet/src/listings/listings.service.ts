@@ -79,4 +79,19 @@ export class ListingsService {
             throw new BadRequestException(error.messsage);
         }
     }
+
+    async search(query: string) {
+        try {
+            const listings = await lastValueFrom(
+                this.client.send('listings.search', query)
+            );
+            
+            return listings;
+        } catch (error) {
+            if (error instanceof UnauthorizedException) {
+                throw new UnauthorizedException(error.message);
+            }
+            throw new BadRequestException(error.messsage);
+        }
+    }
 }

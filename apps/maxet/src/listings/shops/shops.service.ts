@@ -31,6 +31,13 @@ export class ShopsService {
         return shop;
     }
 
+    async listings(id: string) {
+        const shop = await lastValueFrom(
+            this.client.send('shops.listings', id)
+        );
+        return shop;
+    }
+
     async update(id: string, updateShopDto: UpdateShopDto) {
         const shop = await lastValueFrom(
             this.client.send('shops.update', { id, ...updateShopDto })

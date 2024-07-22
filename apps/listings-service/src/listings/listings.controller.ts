@@ -4,6 +4,7 @@ import { CreateListingDto } from '@app/listings';
 import { UpdateListingDto } from '@app/listings';
 import { ApiTags } from '@nestjs/swagger';
 import { MessagePattern, Payload } from '@nestjs/microservices';
+import { Auth, AuthType } from '@app/iam';
 
 @ApiTags('listings')
 @Controller('listings')
@@ -33,5 +34,10 @@ export class ListingsController {
   @MessagePattern('listings.delete')
   remove(@Payload('id') id: string) {
     return this.listingsService.remove(id);
+  }
+
+  @MessagePattern('listings.search')
+  search(@Payload('query') query: string) {
+    return this.listingsService.search(query);
   }
 }
