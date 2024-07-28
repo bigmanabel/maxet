@@ -26,6 +26,9 @@ export class User {
     @Column()
     phoneNumber: string;
 
+    @Column({ nullable: true })
+    avatar: string;
+
     @Column({ default: false })
     isTfaEnabled: boolean;
 

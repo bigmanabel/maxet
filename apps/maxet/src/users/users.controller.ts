@@ -1,7 +1,8 @@
 import { SignUpDto } from '@app/iam';
-import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiBearerAuth()
 @ApiTags('users')
@@ -27,7 +28,9 @@ export class UsersController {
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Body() updateUserDto: SignUpDto) {
+    @UseInterceptors(FileInterceptor('file'))
+    update(@Param('id') id: string, @Body() updateUserDto: SignUpDto, @UploadedFile() file: Express.Multer.File) {
+        updateUserDto.avatar = file?.buffer.toString('base64');
         return this.usersService.update(id, updateUserDto);
     }
 

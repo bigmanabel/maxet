@@ -58,7 +58,10 @@ export class UsersService {
         throw new NotFoundException('User not found');
       }
 
-      await this.userRepository.update(id, updateUserDto);
+      await this.userRepository.update(id, {
+        ...updateUserDto,
+        avatar: updateUserDto.avatar ? updateUserDto.avatar : user.avatar,
+      });
 
       return {
         statusCode: HttpStatus.OK,
