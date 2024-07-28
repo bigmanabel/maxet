@@ -17,6 +17,9 @@ export class ListingsService {
         ...createListingDto,
         shop: {
           id: createListingDto.shop
+        },
+        category: {
+          id: createListingDto.category
         }
       });
 
@@ -94,7 +97,10 @@ export class ListingsService {
       await this.listingRepository.update(id, {
         ...updateListingDto,
         shop: {
-          id: updateListingDto.shop,
+          id: updateListingDto.shop ? updateListingDto.shop : listing.shop.id,
+        },
+        category: {
+          id: updateListingDto.category ? updateListingDto.category : listing.category.id,
         }
       });
 

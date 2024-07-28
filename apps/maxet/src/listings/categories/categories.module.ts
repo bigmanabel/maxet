@@ -1,10 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ListingsController } from './listings.controller';
+import { CategoriesController } from './categories.controller';
+import { CategoriesService } from './categories.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { LISTINGS_SERVICE } from '@app/shared';
-import { ListingsService } from './listings.service';
-import { ShopsModule } from './shops/shops.module';
-import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -18,10 +16,8 @@ import { CategoriesModule } from './categories/categories.module';
         }
       },
     ]),
-    ShopsModule,
-    CategoriesModule
   ],
-  controllers: [ListingsController],
-  providers: [ListingsService]
+  controllers: [CategoriesController],
+  providers: [CategoriesService]
 })
-export class ListingsModule { }
+export class CategoriesModule {}
