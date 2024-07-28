@@ -1,26 +1,107 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCategoryDto } from '../../../../libs/listings/src/dto/create-category.dto';
-import { UpdateCategoryDto } from '../../../../libs/listings/src/dto/update-category.dto';
+import { BadRequestException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Category } from './entities/category.entity';
+import { Repository } from 'typeorm';
+import { CreateCategoryDto, UpdateCategoryDto } from '@app/listings';
 
 @Injectable()
 export class CategoriesService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(
+    @InjectRepository(Category) private readonly categoryRepository: Repository<Category>,
+  ) { }
+
+  async create(createCategoryDto: CreateCategoryDto) {
+    try {
+      const category = this.categoryRepository.create(createCategoryDto);
+
+      await this.categoryRepository.save(category);
+
+      return {
+        statusCode: HttpStatus.CREATED,
+        message: 'Category created successfully',
+        data: category,
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll() {
+    try {
+      const categories = await this.categoryRepository.find();
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Categories retrieved successfully',
+        data: categories,
+      };
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string) {
+    try {
+      const category = await this.categoryRepository.findOneBy({ id });
+
+      if (!category) {
+        throw new NotFoundException('Category not found');
+      }
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Category retrieved successfully',
+        data: category,
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw new BadRequestException(error.message);
+    }
   }
 
-  update(id: string, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    try {
+      const category = await this.categoryRepository.findOneBy({ id });
+
+      if (!category) {
+        throw new NotFoundException('Category not found');
+      }
+
+      await this.categoryRepository.update(id, updateCategoryDto);
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Category updated successfully',
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw new BadRequestException(error.message);
+    }
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    try {
+      const category = await this.categoryRepository.findOneBy({ id });
+
+      if (!category) {
+        throw new NotFoundException('Category not found');
+      }
+
+      await this.categoryRepository.delete(id);
+
+      return {
+        statusCode: HttpStatus.OK,
+        message: 'Category deleted successfully',
+      };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw new BadRequestException(error.message);
+    }
   }
 }
