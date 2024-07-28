@@ -1,17 +1,22 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto, UpdateCategoryDto } from '@app/listings';
 import { Payload } from '@nestjs/microservices';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Auth, AuthType } from '@app/iam';
 
-@ApiBearerAuth()
+// @ApiBearerAuth()
+@Auth(AuthType.None)
 @ApiTags('categories')
 @Controller('categories')
 export class CategoriesController {
     constructor(private readonly categoriesService: CategoriesService) { }
     
     @Post()
-    create(@Body() createCategoryDto: CreateCategoryDto) {
+    @UseInterceptors(FileInterceptor('file'))
+    create(@Body() createCategoryDto: CreateCategoryDto, @UploadedFile() file: Express.Multer.File) {
+        createCategoryDto.image = file?.buffer.toString('base64');
         return this.categoriesService.create(createCategoryDto);
     }
     
@@ -27,7 +32,9 @@ export class CategoriesController {
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Payload() updateCategoryDto: UpdateCategoryDto) {
+    @UseInterceptors(FileInterceptor('file'))
+    update(@Param('id') id: string, @Payload() updateCategoryDto: UpdateCategoryDto, @UploadedFile() file: Express.Multer.File) {
+        updateCategoryDto.image = file?.buffer.toString('base64');
         return this.categoriesService.update(id, updateCategoryDto);
     }
 

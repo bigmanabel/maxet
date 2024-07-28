@@ -5,7 +5,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Auth, AuthType } from '@app/iam';
 import { PaginationQueryDto } from '@app/shared';
 
-@ApiBearerAuth()
+// @ApiBearerAuth()
 @ApiTags('listings')
 @Controller('listings')
 export class ListingsController {
@@ -18,6 +18,7 @@ export class ListingsController {
         return this.listingsService.create(createListingDto);
     }
 
+    @Auth(AuthType.None)
     @Get()
     findAll(@Query() paginationQueryDto: PaginationQueryDto, @Query() listingsQueryDto: ListingsQueryDto) {
         return this.listingsService.findAll(paginationQueryDto, listingsQueryDto);
