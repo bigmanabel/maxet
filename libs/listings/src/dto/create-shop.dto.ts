@@ -14,6 +14,9 @@ export class CreateShopDto {
     @IsNotEmpty()
     location: string;
 
+    @ApiProperty({ type: 'binary', format: 'string' })
+    image: string;
+        
     @ApiProperty()
     @IsNotEmpty()
     owner: string;

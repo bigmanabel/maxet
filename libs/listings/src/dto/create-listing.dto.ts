@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class CreateListingDto {
     @ApiProperty()
@@ -17,6 +17,10 @@ export class CreateListingDto {
     @ApiProperty()
     @IsNotEmpty()
     stockQuantity: number;
+
+    @ApiProperty({ type: 'binary', format: 'string' })
+    @IsOptional()
+    image: string;
 
     @ApiProperty()
     @IsNotEmpty()

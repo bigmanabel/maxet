@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Put, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, Post, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ShopsService } from './shops.service';
 import { CreateShopDto, ShopQueryDto, UpdateShopDto } from '@app/listings';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PaginationQueryDto } from '@app/shared';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiBearerAuth()
 @ApiTags('shops')
@@ -13,7 +14,9 @@ export class ShopsController {
     ) { }
 
     @Post()
-    create(@Body() createShopDto: CreateShopDto) {
+    @UseInterceptors(FileInterceptor('file'))
+    create(@Body() createShopDto: CreateShopDto, @UploadedFile() file: Express.Multer.File) {
+        createShopDto.image = file?.buffer.toString('base64');
         return this.shopService.create(createShopDto);
     }
 
@@ -33,7 +36,9 @@ export class ShopsController {
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Body() updateShopDto: UpdateShopDto) {
+    @UseInterceptors(FileInterceptor('file'))
+    update(@Param('id') id: string, @Body() updateShopDto: UpdateShopDto, @UploadedFile() file: Express.Multer.File) {
+        updateShopDto.image = file?.buffer.toString('base64');
         return this.shopService.update(id, updateShopDto);
     }
 

@@ -94,6 +94,7 @@ export class ShopsService {
 
       await this.shopRepository.update(id, {
         ...updateShopDto,
+        image: updateShopDto.image ? updateShopDto.image : shop.image,
       });
 
       return {

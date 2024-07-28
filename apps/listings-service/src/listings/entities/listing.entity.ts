@@ -19,6 +19,9 @@ export class Listing {
     @Column()
     stockQuantity: number;
 
+    @Column()
+    image: string;
+
     @CreateDateColumn()
     createdAt: Date;
 

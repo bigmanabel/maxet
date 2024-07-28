@@ -101,7 +101,8 @@ export class ListingsService {
         },
         category: {
           id: updateListingDto.category ? updateListingDto.category : listing.category.id,
-        }
+        },
+        image: updateListingDto.image ? updateListingDto.image : listing.image,
       });
 
       return {

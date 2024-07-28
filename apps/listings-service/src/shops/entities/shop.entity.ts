@@ -19,6 +19,9 @@ export class Shop {
     @Column()
     owner: string;
 
+    @Column()
+    image: string;
+
     @Column('enum', { enum: Status, default: Status.Active })
     status: Status;
 
