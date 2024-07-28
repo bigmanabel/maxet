@@ -5,6 +5,7 @@ import { HealthModule } from './health/health.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ListingsModule } from './listings/listings.module';
 import { ShopsModule } from './shops/shops.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { ShopsModule } from './shops/shops.module';
     }),
     HealthModule,
     ListingsModule,
-    ShopsModule
+    ShopsModule,
+    CategoriesModule
   ],
   controllers: [ListingsServiceController],
   providers: [ListingsServiceService],

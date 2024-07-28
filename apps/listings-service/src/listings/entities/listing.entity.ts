@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Shop } from "../../shops/entities/shop.entity";
+import { Category } from "../../categories/entities/category.entity";
 
 @Entity('listings')
 export class Listing { 
@@ -26,4 +27,7 @@ export class Listing {
 
     @ManyToOne(() => Shop, shop => shop.listings)
     shop: Shop;
+
+    @ManyToOne(() => Category, category => category.listings)
+    category: Category;
 }

@@ -21,4 +21,8 @@ export class CreateListingDto {
     @ApiProperty()
     @IsNotEmpty()
     shop: string;
+
+    @ApiProperty()
+    @IsNotEmpty()
+    category: string;
 }
