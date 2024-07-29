@@ -24,6 +24,7 @@ export class ListingsController {
         return this.listingsService.findAll(paginationQueryDto, listingsQueryDto);
     }
 
+    @Auth(AuthType.None)
     @Get(':id')
     findOne(@Param('id') id: string) {
         return this.listingsService.findOne(id);

@@ -149,12 +149,19 @@ export class ListingsService {
         relations: ['shop'],
       });
 
+      if (!listings.length) {
+        throw new NotFoundException('No listings found');
+      }
+
       return {
         statusCode: HttpStatus.OK,
         message: 'Listings retrieved successfully',
         data: listings
       }
     } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
       throw new BadRequestException(error.message);
     }
   }

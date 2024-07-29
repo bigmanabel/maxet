@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ORDERS_SERVICE } from '@app/shared';
+import { Cart } from '../cart/entities/cart.entity';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { ORDERS_SERVICE } from '@app/shared';
         }
       },
     ]),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Cart]),
   ],
   controllers: [UsersController],
   providers: [UsersService],

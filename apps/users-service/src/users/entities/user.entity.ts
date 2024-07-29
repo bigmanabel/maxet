@@ -1,6 +1,7 @@
 import { Role } from "@app/users";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Status } from "@app/shared";
+import { Cart } from "../../cart/entities/cart.entity";
 
 
 @Entity('users')
@@ -40,4 +41,7 @@ export class User {
 
     @Column('enum', { enum: Status, default: Status.Active })
     status: Status;
+
+    @OneToMany(() => Cart, cart => cart.user)
+    cart: Cart[];
 }

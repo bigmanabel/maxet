@@ -10,6 +10,7 @@ import { AccessTokenGuard, AuthenticationGuard, RolesGuard } from '@app/iam';
 import { JwtModule } from '@nestjs/jwt';
 import jwtConfig from '@app/iam/config/jwt.config';
 import { ConfigModule } from '@nestjs/config';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ConfigModule } from '@nestjs/config';
     DeliveriesModule,
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
+    CartModule,
   ],
   controllers: [AppController],
   providers: [
