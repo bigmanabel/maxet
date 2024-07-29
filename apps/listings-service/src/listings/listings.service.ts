@@ -31,7 +31,7 @@ export class ListingsService {
         data: listing,
       }
     } catch (error) {
-      throw new BadRequestException(error.message);
+      return new BadRequestException(error.message).getResponse();
     }
   }
 
@@ -61,7 +61,7 @@ export class ListingsService {
       }
     } catch (error) {
       console.log(error);
-      throw new BadRequestException(error.message);
+      return new BadRequestException(error.message).getResponse();
     }
   }
 
@@ -70,7 +70,7 @@ export class ListingsService {
       const listing = await this.listingRepository.findOneBy({ id });
 
       if (!listing) {
-        throw new NotFoundException('Listing not found');
+        return new NotFoundException('Listing not found').getResponse();
       }
 
       return {
@@ -80,9 +80,9 @@ export class ListingsService {
       }
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new NotFoundException(error.message);
+        return new NotFoundException(error.message).getResponse();
       }
-      throw new BadRequestException(error.message);
+      return new BadRequestException(error.message).getResponse();
     }
   }
 
@@ -91,7 +91,7 @@ export class ListingsService {
       const listing = await this.listingRepository.findOneBy({ id });
 
       if (!listing) {
-        throw new NotFoundException('Listing not found');
+        return new NotFoundException('Listing not found').getResponse();
       }
 
       await this.listingRepository.update(id, {
@@ -111,9 +111,9 @@ export class ListingsService {
       }
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new NotFoundException(error.message);
+        return new NotFoundException(error.message).getResponse();
       }
-      throw new BadRequestException(error.message);
+      return new BadRequestException(error.message).getResponse();
     }
   }
 
@@ -122,7 +122,7 @@ export class ListingsService {
       const listing = await this.listingRepository.findOneBy({ id });
 
       if (!listing) {
-        throw new NotFoundException('Listing not found');
+        return new NotFoundException('Listing not found').getResponse();
       }
 
       await this.listingRepository.remove(listing);
@@ -133,9 +133,9 @@ export class ListingsService {
       }
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new NotFoundException(error.message);
+        return new NotFoundException(error.message).getResponse();
       }
-      throw new BadRequestException(error.message);
+      return new BadRequestException(error.message).getResponse();
     }
   }
 
@@ -148,9 +148,9 @@ export class ListingsService {
         ],
         relations: ['shop'],
       });
-
+ 
       if (!listings.length) {
-        throw new NotFoundException('No listings found');
+        return new NotFoundException('No listings found').getResponse();
       }
 
       return {
@@ -160,9 +160,9 @@ export class ListingsService {
       }
     } catch (error) {
       if (error instanceof NotFoundException) {
-        throw new NotFoundException(error.message);
+        return new NotFoundException(error.message).getResponse();
       }
-      throw new BadRequestException(error.message);
+      return new BadRequestException(error.message).getResponse();
     }
   }
 }

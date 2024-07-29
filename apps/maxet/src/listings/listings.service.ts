@@ -20,7 +20,7 @@ export class ListingsService {
             if (error instanceof UnauthorizedException) {
                 throw new UnauthorizedException(error.message);
             }
-            throw new BadRequestException(error.messsage);
+            throw new BadRequestException(error.message);
         }
     }
 

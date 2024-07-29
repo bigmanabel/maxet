@@ -6,6 +6,8 @@ import { User } from './entities/user.entity';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ORDERS_SERVICE } from '@app/shared';
 import { Cart } from '../cart/entities/cart.entity';
+import { HashingService } from '../iam/hashing/hashing.service';
+import { BcryptService } from '../iam/hashing/bcrypt.service';
 
 @Module({
   imports: [
@@ -22,6 +24,12 @@ import { Cart } from '../cart/entities/cart.entity';
     TypeOrmModule.forFeature([User, Cart]),
   ],
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [
+    UsersService,
+    {
+      provide: HashingService,
+      useClass: BcryptService
+    }
+  ],
 })
 export class UsersModule { }

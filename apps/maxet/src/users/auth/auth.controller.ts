@@ -13,7 +13,7 @@ export class AuthController {
     ) {}
 
     @Post('sign-up')
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(FileInterceptor('avatar'))
     signUp(@Body() signUpDto: SignUpDto, @UploadedFile() file: Express.Multer.File) {
         signUpDto.avatar = file?.buffer.toString('base64');
         

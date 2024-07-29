@@ -48,7 +48,7 @@ export class AuthenticationService {
             });
 
             if (!user || user.status === Status.Inactive) {
-                return new UnauthorizedException('User does not exist');
+                return new UnauthorizedException('User does not exist').getResponse();
             }
 
             const passwordIsValid = await this.hashingService.compare(

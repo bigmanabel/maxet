@@ -6,12 +6,14 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { ORDERS_SERVICE, Status } from '@app/shared';
 import { ClientProxy } from '@nestjs/microservices';
+import { HashingService } from '../iam/hashing/hashing.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @Inject(ORDERS_SERVICE) private readonly client: ClientProxy,
+    private readonly hashingService: HashingService,
   ) { }
 
   async findAll() {
@@ -61,6 +63,7 @@ export class UsersService {
       await this.userRepository.update(id, {
         ...updateUserDto,
         avatar: updateUserDto.avatar ? updateUserDto.avatar : user.avatar,
+        password: updateUserDto.password ? await this.hashingService.hash(updateUserDto.password) : user.password,
       });
 
       return {

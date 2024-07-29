@@ -4,6 +4,7 @@ import { CreateShopDto, ShopQueryDto, UpdateShopDto } from '@app/listings';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { PaginationQueryDto } from '@app/shared';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { Auth, AuthType } from '@app/iam';
 
 @ApiBearerAuth()
 @ApiTags('shops')
@@ -14,12 +15,13 @@ export class ShopsController {
     ) { }
 
     @Post()
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(FileInterceptor('image'))
     create(@Body() createShopDto: CreateShopDto, @UploadedFile() file: Express.Multer.File) {
         createShopDto.image = file?.buffer.toString('base64');
         return this.shopService.create(createShopDto);
     }
 
+    @Auth(AuthType.None)
     @Get()
     findAll(@Query() paginationQueryDto: PaginationQueryDto, @Query() shopQueryDto: ShopQueryDto) {
         return this.shopService.findAll(paginationQueryDto, shopQueryDto);

@@ -1,9 +1,10 @@
 import { CreateListingDto, ListingsQueryDto, UpdateListingDto } from '@app/listings';
-import { Body, Controller, Delete, Get, Param, Put, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Put, Post, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { ListingsService } from './listings.service';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Auth, AuthType } from '@app/iam';
 import { PaginationQueryDto } from '@app/shared';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 // @ApiBearerAuth()
 @ApiTags('listings')
@@ -14,7 +15,9 @@ export class ListingsController {
     ) { }
 
     @Post()
-    create(@Body() createListingDto: CreateListingDto) {
+    @UseInterceptors(FileInterceptor('image'))
+    create(@Body() createListingDto: CreateListingDto, @UploadedFile() file: Express.Multer.File) {
+        createListingDto.image = file?.buffer.toString('base64');
         return this.listingsService.create(createListingDto);
     }
 

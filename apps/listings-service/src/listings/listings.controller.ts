@@ -13,9 +13,7 @@ export class ListingsController {
   constructor(private readonly listingsService: ListingsService) { }
 
   @MessagePattern('listings.create')
-  @UseInterceptors(FileInterceptor('file'))
-  create(@Payload() createListingDto: CreateListingDto, @UploadedFile() file: Express.Multer.File) {
-    createListingDto.image = file?.buffer.toString('base64');
+  create(@Payload() createListingDto: CreateListingDto) {
     return this.listingsService.create(createListingDto);
   }
 
